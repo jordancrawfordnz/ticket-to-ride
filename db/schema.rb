@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104211020) do
+ActiveRecord::Schema.define(version: 20170104225809) do
 
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -18,10 +18,10 @@ ActiveRecord::Schema.define(version: 20170104211020) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.text     "name"
+    t.text     "name",       null: false
     t.decimal  "score"
-    t.text     "colour"
-    t.integer  "game_id"
+    t.text     "colour",     null: false
+    t.integer  "game_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_players_on_game_id"
