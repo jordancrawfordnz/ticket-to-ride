@@ -10,24 +10,22 @@ class GamesController < ApplicationController
 
   def new
     @game = Game.new
+    @player_count = 5
   end
 
   def edit
   end
 
   def create
-    # TODO: Include Players. Use a SetupGame service.
-    @game = Game.new(game_params)
+    setup_game = SetupGame.new(player_details: player_params)
+    setup_game.call
 
-    # respond_to do |format|
-    #   if @game.save
-    #     format.html { redirect_to @game, notice: 'Game was successfully created.' }
-    #     format.json { render :show, status: :created, location: @game }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @game.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    if setup_game.call
+      redirect_to setup_game.game
+    elsif
+      flash[:errors] = setup_game.errors
+      redirect_to :new_game
+    end
   end
 
   def destroy
@@ -36,7 +34,12 @@ class GamesController < ApplicationController
   end
 
   private
-    def game_params
-      params.fetch(:game, {})
-    end
+
+  def game_params
+    params.fetch(:game, {})
+  end
+
+  def player_params
+    game_params["players"].values
+  end
 end
