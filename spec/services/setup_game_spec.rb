@@ -17,6 +17,12 @@ describe SetupGame do
         expect { setup_game_instance.call }.to change { Player.count }.by(player_details.length)
       end
 
+      it "has Players associated with the game" do
+        setup_game_instance.call
+        game = setup_game_instance.game
+        expect(game.players.count).to equal player_details.length
+      end
+      
       before do
         setup_game_instance.call
       end

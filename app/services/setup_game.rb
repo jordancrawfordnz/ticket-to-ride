@@ -7,22 +7,23 @@ class SetupGame
   end
 
   def call
-    game_instance = Game.new
+    Game.transaction do
+      game_instance = Game.create
+      @errors += game_instance.errors.full_messages if game_instance.errors.any?
 
-    game_instance.transaction do
-      @player_details.each do |player_params|
-        player = Player.new(player_params)
-        game_instance.players.push(player)
+      Player.transaction(requires_new: true) do
+        @player_details.each do |player_params|
+          player = Player.new(player_params.merge(game: game_instance))
+          player.save
+          @errors += player.errors.full_messages if player.errors.any?
+        end
+        raise ActiveRecord::Rollback if @errors.any?
       end
 
-      game_save_result = game_instance.save
-      if game_save_result
+      if @errors.none?
         @game = game_instance
-      else
-        @errors.push(game_instance.errors.full_messages)
       end
-
-      game_save_result
     end
+    @errors.none?
   end
 end
