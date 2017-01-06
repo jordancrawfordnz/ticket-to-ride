@@ -12,9 +12,16 @@ class SetupGame
       @errors += game_instance.errors.full_messages if game_instance.errors.any?
 
       Player.transaction(requires_new: true) do
-        @player_details.each do |player_params|
+        @player_details.each do |player_key, player_params|
           player = Player.new(player_params.merge(game: game_instance))
           player.save
+          @errors += player.errors.full_messages.map do |error_message|
+            {
+              message: error_message,
+              item: player_key
+            }
+          end
+
           @errors += player.errors.full_messages if player.errors.any?
         end
         raise ActiveRecord::Rollback if @errors.any?

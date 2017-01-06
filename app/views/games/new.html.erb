@@ -13,15 +13,16 @@
 <%= form_for @game do |f| %>
   <% @player_count.times do |index| %>
     <%=f.fields_for "players" do |players_fields| %>
-      <%=players_fields.fields_for "#{index}" do |player_fields| %>
+      <%=players_fields.fields_for "player_#{index}" do |player_fields| %>
         <div>
-          <!-- <strong>Player #{index + 1}</strong> -->
-          <%= player_fields.label :name, "Player #{index+1} name:" %>
+          <strong><%= "Player #{index + 1}" %></strong>
+          <%= player_fields.label :name, "Name:" %>
           <%= player_fields.text_field :name %>
-          <!-- <%= player_fields.label :colour, "Player #{index+1} name:" %>
-          <%= player_fields.text_field :colour %> -->
+          <%= player_fields.label :colour, "Colour:" %>
+          <%= player_fields.text_field :colour %>
           <!-- TODO: Other fields needed -->
         </div>
+        <br>
       <% end %>
     <% end %>
   <% end %>

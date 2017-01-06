@@ -40,6 +40,6 @@ class GamesController < ApplicationController
   end
 
   def player_params
-    game_params["players"].values
+    game_params["players"].symbolize_keys
   end
 end

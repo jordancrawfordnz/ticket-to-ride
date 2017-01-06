@@ -36,7 +36,7 @@ describe GamesController do
     end
 
     before do
-      expect(SetupGame).to receive(:new) { setup_game_double }.with(player_details: [ player1_details, player2_details ])
+      expect(SetupGame).to receive(:new) { setup_game_double }.with(player_details: { player_1: player1_details, player_2: player2_details } )
     end
 
     it "calls SetupGame#call" do
@@ -60,7 +60,7 @@ describe GamesController do
       end
 
       let(:setup_game_result) { false }
-      let(:setup_game_errors) { [ "Error" ] }
+      let(:setup_game_errors) { { message: "Error!", item: "player_1" } }
 
       it "redirects to the new game page" do
         expect(response).to redirect_to :new_game
