@@ -5,7 +5,7 @@ describe SetupGame do
   let(:setup_game_instance) { SetupGame.new(player_details: player_details) }
   let(:player1_details) { { name: "Player 1", colour: "red" } }
   let(:player2_details) { { name: "Player 2", colour: "green" } }
-  let(:player_details) { { player_1: player1_details, player_2: player2_details } }
+  let(:player_details) { { "player1" => player1_details, "player2" => player2_details } }
 
   context "with valid players" do
     describe "#call" do
@@ -61,12 +61,8 @@ describe SetupGame do
         expect(setup_game_instance.errors.length).not_to be_zero
       end
 
-      it "errors have a message field" do
-        expect(setup_game_instance.errors.first.message).not_to be_nil
-      end
-
-      it "player error's item is filled in with the player key" do
-        expect(setup_game_instance.errors.first.item).to_equal "player_2"
+      it "has an error for player2" do
+        expect(setup_game_instance.errors["player2"].first).not_to be_nil
       end
     end
   end

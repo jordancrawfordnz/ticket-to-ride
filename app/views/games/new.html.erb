@@ -1,13 +1,5 @@
 <h1>New Game</h1>
 
-<% if flash[:errors] %>
-  Errors:
-  <% flash[:errors].each do |error| %>
-    <div class="message">- <%= error %></div>
-  <% end %>
-  <br>
-<% end %>
-
 <!-- TODO: list of players and their colours -->
 
 <%= form_for @game do |f| %>
@@ -16,6 +8,17 @@
       <%=players_fields.fields_for "player_#{index}" do |player_fields| %>
         <div>
           <strong><%= "Player #{index + 1}" %></strong>
+          <% if flash[:errors]
+            field_errors = flash[:errors]["player_#{index}"]
+          end
+          %>
+          <% if field_errors %>
+            <br>
+            Field errors:<br>
+            <%field_errors.each do |field_error| %>
+              - <%=field_error %><br>
+            <% end %>
+          <% end %>
           <%= player_fields.label :name, "Name:" %>
           <%= player_fields.text_field :name %>
           <%= player_fields.label :colour, "Colour:" %>

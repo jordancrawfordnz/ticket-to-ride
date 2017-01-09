@@ -40,6 +40,13 @@ class GamesController < ApplicationController
   end
 
   def player_params
-    game_params["players"].symbolize_keys
+    params = {}
+    game_params['players'].each do |player_name, player_details|
+      clean_player_details = params[player_name] = {}
+      player_details.each do |player_detail_key, player_detail|
+        clean_player_details[player_detail_key.to_sym] = player_detail
+      end
+    end
+    params
   end
 end

@@ -5,7 +5,7 @@ require "rspec/mocks"
 describe GamesController do
   describe "POST create" do
     let(:setup_game_result) { true }
-    let(:setup_game_errors) { [] }
+    let(:setup_game_errors) { {} }
     let(:setup_game_game) { Game.new }
     let(:setup_game_double) { instance_double(SetupGame, call: setup_game_result, errors: setup_game_errors, game: setup_game_game) }
     let(:player1_details) {
@@ -24,8 +24,8 @@ describe GamesController do
       {
         game: {
           players: {
-            player1: player1_details,
-            player2: player2_details
+            "player1": player1_details,
+            "player2": player2_details
           }
         }
       }
@@ -36,7 +36,7 @@ describe GamesController do
     end
 
     before do
-      expect(SetupGame).to receive(:new) { setup_game_double }.with(player_details: { player_1: player1_details, player_2: player2_details } )
+      expect(SetupGame).to receive(:new) { setup_game_double }.with(player_details: { "player1" => player1_details, "player2" => player2_details } )
     end
 
     it "calls SetupGame#call" do
@@ -60,7 +60,7 @@ describe GamesController do
       end
 
       let(:setup_game_result) { false }
-      let(:setup_game_errors) { { message: "Error!", item: "player_1" } }
+      let(:setup_game_errors) { { "player1" => ["Error!"] } }
 
       it "redirects to the new game page" do
         expect(response).to redirect_to :new_game
