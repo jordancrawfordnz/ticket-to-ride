@@ -22,8 +22,7 @@
           <%= player_fields.label :name, "Name:" %>
           <%= player_fields.text_field :name %>
           <%= player_fields.label :colour, "Colour:" %>
-          <%= player_fields.text_field :colour %>
-          <!-- TODO: Other fields needed -->
+          <%= player_fields.select :colour, ["Yellow", "Black", "Blue", "Green", "Red"]%>
         </div>
         <br>
       <% end %>
