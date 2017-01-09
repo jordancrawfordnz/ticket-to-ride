@@ -13,16 +13,15 @@ class SetupGame
         @errors["game"] = game_instance.errors.full_messages
       end
 
-      Player.transaction(requires_new: true) do
-        @player_details.each do |player_key, player_params|
-          player = Player.new(player_params.merge(game: game_instance))
-          player.save
-          if player.errors.any?
-            @errors[player_key] = player.errors.full_messages
-          end
+      @player_details.each do |player_key, player_params|
+        player = Player.new(player_params.merge(game: game_instance))
+        player.save
+        if player.errors.any?
+          @errors[player_key] = player.errors.full_messages
         end
-        raise ActiveRecord::Rollback if @errors.any?
       end
+
+      raise ActiveRecord::Rollback if @errors.any?
 
       if @errors.none?
         @game = game_instance

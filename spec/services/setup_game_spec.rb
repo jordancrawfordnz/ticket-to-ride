@@ -17,6 +17,10 @@ describe SetupGame do
         expect { setup_game_instance.call }.to change { Player.count }.by(player_details.length)
       end
 
+      it "creates a Game" do
+        expect { setup_game_instance.call }.to change { Game.count }.by(1)
+      end
+
       it "has Players associated with the game" do
         setup_game_instance.call
         game = setup_game_instance.game
@@ -49,20 +53,26 @@ describe SetupGame do
         expect { setup_game_instance.call }.to change { Player.count }.by(0)
       end
 
-      before do
-        setup_game_instance.call
+      it "does not create any Games" do
+        expect { setup_game_instance.call }.to change { Game.count }.by(0)
       end
 
-      it "does not have a Game" do
-        expect(setup_game_instance.game).to be_nil
-      end
+      describe "after being called" do
+        before do
+          setup_game_instance.call
+        end
 
-      it "has errors" do
-        expect(setup_game_instance.errors.length).not_to be_zero
-      end
+        it "does not have a Game" do
+          expect(setup_game_instance.game).to be_nil
+        end
 
-      it "has an error for player2" do
-        expect(setup_game_instance.errors["player2"].first).not_to be_nil
+        it "has errors" do
+          expect(setup_game_instance.errors.length).not_to be_zero
+        end
+
+        it "has an error for player2" do
+          expect(setup_game_instance.errors["player2"].first).not_to be_nil
+        end
       end
     end
   end
