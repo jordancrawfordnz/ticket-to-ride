@@ -10,6 +10,12 @@ When(/^the user fills in details about (\d+) players and (\d+) without a player 
   end
 end
 
-Then(/^the user is on a game page$/) do
+Then(/^the user is on (?:the|a) game page$/) do
   on_game_page?
+end
+
+When(/^a game with (\d+) players is setup$/) do |player_count|
+    visit_root_page
+    set_player_details(limit: player_count.to_i)
+    click_button("Create Game")
 end
