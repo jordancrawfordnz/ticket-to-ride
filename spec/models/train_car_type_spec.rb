@@ -15,27 +15,29 @@ describe TrainCarType, type: :model do
     end
   end
 
-  context "if the name is nil" do
-    let(:name) { nil }
+  describe "on creation" do
+    context "if the name is nil" do
+      let(:name) { nil }
 
-    include_examples "train car type is invalid"
-  end
+      include_examples "train car type is invalid"
+    end
 
-  context "if the total is nil" do
-    let(:total) { nil }
+    context "if the total is nil" do
+      let(:total) { nil }
 
-    include_examples "train car type is invalid"
-  end
+      include_examples "train car type is invalid"
+    end
 
-  context "if provided no parameters" do
-    let(:parameters) { nil }
+    context "if provided no parameters" do
+      let(:parameters) { nil }
 
-    include_examples "train car type is invalid"
-  end
+      include_examples "train car type is invalid"
+    end
 
-  context "if provided a name and total" do
-    it "is valid" do
-      expect(train_car_type).to be_valid
+    context "if provided a name and total" do
+      it "is valid" do
+        expect(train_car_type).to be_valid
+      end
     end
   end
 end
