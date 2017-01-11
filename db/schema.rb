@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104225809) do
+ActiveRecord::Schema.define(version: 20170111030443) do
+
+  create_table "dealt_train_cars", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "train_car_types_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "train_car_type_id"
+    t.index ["player_id"], name: "index_dealt_train_cars_on_player_id"
+    t.index ["train_car_type_id"], name: "index_dealt_train_cars_on_train_car_type_id"
+    t.index ["train_car_types_id"], name: "index_dealt_train_cars_on_train_car_types_id"
+  end
 
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,6 +36,13 @@ ActiveRecord::Schema.define(version: 20170104225809) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_players_on_game_id"
+  end
+
+  create_table "train_car_types", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.integer  "total",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
