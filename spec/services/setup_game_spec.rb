@@ -7,6 +7,20 @@ describe SetupGame do
   let(:player2_details) { { name: "Player 2", colour: "green" } }
   let(:player_details) { { "player1" => player1_details, "player2" => player2_details } }
 
+  shared_examples "does not save anything" do
+    it "returns false" do
+      expect(setup_game_instance.call).to be false
+    end
+
+    it "does not create any Players" do
+      expect { setup_game_instance.call }.to change { Player.count }.by(0)
+    end
+
+    it "does not create any Games" do
+      expect { setup_game_instance.call }.to change { Game.count }.by(0)
+    end
+  end
+
   context "with valid players" do
     describe "#call" do
       it "returns true" do
@@ -45,7 +59,6 @@ describe SetupGame do
             expect(player.dealt_train_cars.length).to eq SetupGame::INITIAL_DEAL_AMOUNT
           end
         end
-
       end
     end
   end
@@ -54,17 +67,7 @@ describe SetupGame do
     let(:player2_details) { { name: "Player 2" } }
 
     describe "#call" do
-      it "returns false" do
-        expect(setup_game_instance.call).to be false
-      end
-
-      it "does not create any Players" do
-        expect { setup_game_instance.call }.to change { Player.count }.by(0)
-      end
-
-      it "does not create any Games" do
-        expect { setup_game_instance.call }.to change { Game.count }.by(0)
-      end
+      include_examples "does not save anything"
 
       describe "after being called" do
         before do
@@ -85,4 +88,25 @@ describe SetupGame do
       end
     end
   end
+
+  context "when there are no train cars to deal" do
+    before do
+      expect(DealTrainCars).to receive(:new).twice { instance_double(DealTrainCars, call: nil) }
+    end
+
+    include_examples "does not save anything"
+
+    describe "after being called" do
+      before do
+        setup_game_instance.call
+      end
+
+      it "both players have errors" do
+        ["player1", "player2"].each do |player_id|
+          expect(setup_game_instance.errors[player_id]).to include SetupGame::NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE
+        end
+      end
+    end
+  end
+
 end

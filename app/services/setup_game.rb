@@ -24,8 +24,8 @@ class SetupGame
         end
 
         if !DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
-            player_errors = errors = @errors[player_key] ||= []
-            player_errors.push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
+          player_errors = errors = @errors[player_key] ||= []
+          player_errors.push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
         end
       end
 
