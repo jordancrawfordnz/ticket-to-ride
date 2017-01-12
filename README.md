@@ -1,24 +1,9 @@
-# README
+# Ticket to Ride
+A Ruby on Rails implementation of the Ticket to Ride board game.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Developed by Jordan Crawford during dev-train at [Powershop](http://powershop.com/). This is a way for me to learn Ruby, Rails, testing and object oriented design.
 
-Things you may want to cover:
+**Copyright 2017, Powershop NZ Ltd.** This is because it was developed during work hours at Powershop.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Licence
+MIT
