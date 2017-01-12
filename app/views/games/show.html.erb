@@ -2,4 +2,13 @@
 
 <p id="notice"><%= notice %></p>
 
+<h1><%= "#{@player.name} - #{@player.colour}" %></h1>
+
+<h3>My Train Car Cards</h3>
+<% @player.dealt_train_cars.each do |dealt_train_car| %>
+  <div class="train-car">- <%= dealt_train_car.train_car_type.name %></div>
+  <br>
+<% end %>
+
+<br>
 <%= link_to 'Back', games_path %>
