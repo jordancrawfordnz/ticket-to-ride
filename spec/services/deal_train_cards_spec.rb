@@ -9,18 +9,100 @@ describe DealTrainCars do
   let(:deal_train_cards) { DealTrainCars.new(parameters) }
 
   describe "#call" do
-    it "returns something truthy" do
-      expect(deal_train_cards.call).to be_truthy
+    context "with one type of train car" do
+      let(:total_cards) { 3 }
+      let(:train_car_type_params) { { name: "Test Car", total: total_cards } }
+      let(:assigned_cards) { 0 }
+
+      before do
+        TrainCarType.destroy_all
+        train_car_type = TrainCarType.create!(train_car_type_params)
+
+        assigned_cards.times do
+          DealtTrainCar.create!(player: player, train_car_type: train_car_type)
+        end
+      end
+
+      shared_examples "deals cards successfully" do
+        it "returns something truthy" do
+          expect(deal_train_cards.call).to be_truthy
+        end
+
+        it "returns the amount to deal worth of cards" do
+          expect(deal_train_cards.call.length).to eq amount_to_deal
+        end
+
+        it "adds cards to the players train car cards" do
+          expect { deal_train_cards.call }.to change { player.dealt_train_cars.count }.by(amount_to_deal)
+        end
+      end
+
+      shared_examples "cannot deal due to insufficient cards remaining" do
+        it "returns a falsy result" do
+          expect(deal_train_cards.call).to be_falsy
+        end
+
+        it "does not issue any cards" do
+          expect { deal_train_cards.call }.to change { player.dealt_train_cars.count }.by(0)
+        end
+      end
+
+      context "deal two cards on a fresh deck" do
+        include_examples "deals cards successfully"
+      end
+
+      context "deal one card when only one remains" do
+        let(:assigned_cards) { total_cards - 1 }
+        let(:amount_to_deal) { 1 }
+
+        include_examples "deals cards successfully"
+      end
+
+      context "deal two cards when only one remains" do
+        let(:assigned_cards) { total_cards - 1 }
+        let(:amount_to_deal) { 2 }
+
+        include_examples "cannot deal due to insufficient cards remaining"
+      end
+
+      context "deal one card when none remain" do
+        let(:assigned_cards) { total_cards }
+        let(:amount_to_deal) { 1 }
+
+        include_examples "cannot deal due to insufficient cards remaining"
+      end
+
+      context "deal two cards when none remain" do
+        let(:assigned_cards) { total_cards }
+        let(:amount_to_deal) { 2 }
+
+        include_examples "cannot deal due to insufficient cards remaining"
+      end
     end
 
-    it "returns the amount to deal worth of cards" do
-      expect(deal_train_cards.call.length).to eq amount_to_deal
-    end
+    context "with two types of train card" do
+      let(:train_car_type1_params) { { name: "Test Car 1", total: 3 } }
+      let(:train_car_type2_params) { { name: "Test Car 2", total: 1 } }
+      let(:assigned_cards) { 0 }
+      let(:train_car_type1) { TrainCarType.new(train_car_type1_params) }
+      let(:train_car_type2) { TrainCarType.new(train_car_type2_params) }
+      let(:amount_to_deal) { 1 }
 
-    it "adds cards to the players train car cards" do
-      expect { deal_train_cards.call }.to change { player.dealt_train_cars.count }.by(amount_to_deal)
-    end
+      before do
+        srand 10
 
-    # TODO: Add tests that check that the random card selected is the one expected.
+        TrainCarType.destroy_all
+        train_car_type1.save!
+        train_car_type2.save!
+      end
+
+      it "randomly assigns train cards" do
+        # "Randomly" but in this exact order due to the srand.
+        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type1
+        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type1
+        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type1
+        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type2
+      end
+    end
   end
 end

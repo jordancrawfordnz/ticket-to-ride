@@ -5,10 +5,15 @@ class DealTrainCars
   end
 
   def call
+    if remaining_train_car_deck.length - @amount_to_deal < 0
+      return false
+    end
+
     dealt_cards = []
     DealtTrainCar.transaction do
       @amount_to_deal.times do
-        dealt_cards.push(DealtTrainCar.create(player: @player, train_car_type: train_car_type_from_deck))
+        train_car_type = remaining_train_car_deck.sample
+        dealt_cards.push(DealtTrainCar.create(player: @player, train_car_type: train_car_type))
       end
     end
     dealt_cards
@@ -16,7 +21,7 @@ class DealTrainCars
 
   private
 
-  def train_car_type_from_deck
+  def remaining_train_car_deck
     deck = []
     TrainCarType.order(:name).each do |train_car_type|
       remaining_train_car_count = CountRemainingTrainCars.new(game: @player.game, train_car_type: train_car_type).call
@@ -24,7 +29,6 @@ class DealTrainCars
         deck.push(train_car_type)
       end
     end
-
-    deck.sample
+    deck
   end
 end

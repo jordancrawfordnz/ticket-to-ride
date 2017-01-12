@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe DealtTrainCar, type: :model do
+describe DealtTrainCar, type: :model do
   let(:player) { Player.new(name: "Player 1") }
   let(:train_car_type) { TrainCarType.find_by(name: "Locomotive") }
   let(:parameters) { { player: player, train_car_type: train_car_type } }
   let(:dealt_train_car) { DealtTrainCar.new(parameters) }
 
-  RSpec.shared_examples "dealt train car is invalid" do
+  shared_examples "dealt train car is invalid" do
     context "then it" do
       it "is invalid" do
         expect(dealt_train_car).not_to be_valid
