@@ -21,22 +21,31 @@ describe SetupGame do
         expect { setup_game_instance.call }.to change { Game.count }.by(1)
       end
 
-      it "has Players associated with the game" do
-        setup_game_instance.call
-        game = setup_game_instance.game
-        expect(game.players.count).to equal player_details.length
-      end
+      context "after calling" do
+        before do
+          setup_game_instance.call
+        end
 
-      before do
-        setup_game_instance.call
-      end
+        it "has Players associated with the game" do
+          game = setup_game_instance.game
+          expect(game.players.count).to equal player_details.length
+        end
 
-      it "has a Game" do
-        expect(setup_game_instance.game).not_to be_nil
-      end
+        it "has a Game" do
+          expect(setup_game_instance.game).not_to be_nil
+        end
 
-      it "has no errors" do
-        expect(setup_game_instance.errors.length).to be_zero
+        it "has no errors" do
+          expect(setup_game_instance.errors.length).to be_zero
+        end
+
+        it "deals train cards to each player" do
+          game = setup_game_instance.game
+          game.players.each do |player|
+            expect(player.dealt_train_cars.length).to eq SetupGame::INITIAL_DEAL_AMOUNT
+          end
+        end
+
       end
     end
   end
