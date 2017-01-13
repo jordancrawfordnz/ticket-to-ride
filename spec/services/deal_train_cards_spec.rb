@@ -3,7 +3,7 @@ require "spec_helper"
 
 describe DealTrainCars do
   let(:game) { Game.create! }
-  let(:player) { Player.create!(name: "Player 1", game: game, colour: "Red") }
+  let(:player) { Player.create!(name: "Player 1", game: game, colour: "Red", train_pieces: 40) }
   let(:amount_to_deal) { 2 }
   let(:parameters) { { player: player, amount_to_deal: amount_to_deal } }
   let(:deal_train_cards) { DealTrainCars.new(parameters) }

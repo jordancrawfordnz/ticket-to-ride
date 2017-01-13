@@ -2,6 +2,7 @@ class SetupGame
   attr_reader :game, :errors
 
   INITIAL_DEAL_AMOUNT = 3
+  INITIAL_TRAIN_PIECES = 45
   NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE = "Could not deal to the player, there are not enough cards."
 
   def initialize(player_details:)
@@ -17,13 +18,11 @@ class SetupGame
       end
 
       @player_details.each do |player_key, player_params|
-        player = Player.new(player_params.merge(game: game_instance))
+        player = Player.new(player_params.merge(game: game_instance, train_pieces: INITIAL_TRAIN_PIECES))
         player.save
         if player.errors.any?
           @errors[player_key] = player.errors.full_messages
-        end
-
-        if !DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
+        elsif !DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
           player_errors = errors = @errors[player_key] ||= []
           player_errors.push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
         end

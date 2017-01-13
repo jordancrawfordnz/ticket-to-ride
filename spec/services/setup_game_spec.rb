@@ -59,6 +59,13 @@ describe SetupGame do
             expect(player.dealt_train_cars.length).to eq SetupGame::INITIAL_DEAL_AMOUNT
           end
         end
+
+        it "players have INITIAL_TRAIN_PIECES many train pieces assigned" do
+          game = setup_game_instance.game
+          game.players.each do |player|
+            expect(player.train_pieces).to eq SetupGame::INITIAL_TRAIN_PIECES
+          end
+        end
       end
     end
   end

@@ -9,7 +9,8 @@ describe Player do
   let(:game) { Game.new }
   let(:game_alt) { Game.new }
   let(:player) { Player.new(parameters) }
-  let(:parameters) { {name: name, colour: colour, game: game} }
+  let(:train_pieces) { 45 }
+  let(:parameters) { {name: name, colour: colour, game: game, train_pieces: train_pieces} }
 
   context "provided a valid name, colour and game" do
     it "is valid" do
@@ -32,14 +33,26 @@ describe Player do
       include_examples "player is invalid"
     end
 
-    context "the colour is nil" do
+    context "when the colour is nil" do
       let(:colour) { nil }
 
       include_examples "player is invalid"
     end
 
-    context "the game is nil" do
+    context "when the game is nil" do
       let(:game) { nil }
+
+      include_examples "player is invalid"
+    end
+
+    context "when the train_pieces are nil" do
+      let(:train_pieces) { nil }
+
+      include_examples "player is invalid"
+    end
+
+    context "when the train_pieces are negative" do
+      let(:train_pieces) { -40 }
 
       include_examples "player is invalid"
     end
@@ -50,11 +63,11 @@ describe Player do
       end
 
       it "creating another Green player for the same game is invalid" do
-        expect(Player.new({name: name_alt, colour: colour, game: game})).not_to be_valid
+        expect(Player.new({name: name_alt, colour: colour, game: game, train_pieces: 20})).not_to be_valid
       end
 
       it "creating another Green player for a different game is valid" do
-        expect(Player.new({name: name_alt, colour: colour, game: game_alt})).to be_valid
+        expect(Player.new({name: name_alt, colour: colour, game: game_alt, train_pieces: 20})).to be_valid
       end
     end
   end
