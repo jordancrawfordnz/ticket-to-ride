@@ -10,3 +10,7 @@ def test_players
   end
   players
 end
+
+def test_game
+  Game.create(players: test_players)
+end

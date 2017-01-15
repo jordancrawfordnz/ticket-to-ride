@@ -8,10 +8,8 @@ describe TrainCarType, type: :model do
   let(:train_car_type) { TrainCarType.new(parameters) }
 
   RSpec.shared_examples "train car type is invalid" do
-    context "then it" do
-      it "is invalid" do
+    it "is invalid" do
         expect(train_car_type).not_to be_valid
-      end
     end
   end
 

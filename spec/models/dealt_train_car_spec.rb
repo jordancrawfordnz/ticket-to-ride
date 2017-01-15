@@ -7,10 +7,8 @@ describe DealtTrainCar, type: :model do
   let(:dealt_train_car) { DealtTrainCar.new(parameters) }
 
   shared_examples "dealt train car is invalid" do
-    context "then it" do
-      it "is invalid" do
-        expect(dealt_train_car).not_to be_valid
-      end
+    it "is invalid" do
+      expect(dealt_train_car).not_to be_valid
     end
   end
 
