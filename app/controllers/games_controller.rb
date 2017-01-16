@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  DRAW_TRAIN_CARS_FAILED_ERROR = "Could not draw train cars."
+
   def index
     @games = Game.all
   end
@@ -17,7 +19,7 @@ class GamesController < ApplicationController
   end
 
   def create
-    setup_game = SetupGame.new(player_details: player_params)
+    setup_game = SetupGame.new(player_details: player_details)
     setup_game.call
 
     if setup_game.call
@@ -33,20 +35,29 @@ class GamesController < ApplicationController
     redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
-  private
+  # TODO: Could generalise this a bit more, e.g.: action.
+    # Maybe this belongs somewhere else, something to do with turns perhaps.
+  def draw_train_cars
+    @game = Game.find(params[:id])
+    @player = @game.players.first
 
-  def game_params
-    params.fetch(:game, {})
+    draw_train_cars_result = MakeDrawTrainCarsTurn.new(player: @player).call
+    if !draw_train_cars_result
+      flash[:errors] = [DRAW_TRAIN_CARS_FAILED_ERROR]
+    end
+    redirect_to @game
   end
 
-  def player_params
-    params = {}
-    game_params['players'].each do |player_name, player_details|
-      clean_player_details = params[player_name] = {}
-      player_details.each do |player_detail_key, player_detail|
-        clean_player_details[player_detail_key.to_sym] = player_detail
-      end
+  private
+
+  def clean_player_detail(player_detail)
+    player_detail.transform_keys do |detail_key|
+      detail_key.to_sym
     end
-    params
+  end
+
+  def player_details
+    player_params = params.fetch(:game)['players'].to_unsafe_h # TODO: Any way to do this safely?
+    player_params.transform_values { |player_detail| clean_player_detail(player_detail) }
   end
 end

@@ -1,13 +1,71 @@
 require "rails_helper"
 require "spec_helper"
 require "rspec/mocks"
+require "test_data_helper"
 
 describe GamesController do
+  describe "POST draw_train_cars" do
+    def post_draw_train_cars
+      post :draw_train_cars, params: { id: service_game.id }
+    end
+
+    let(:service_result) { true }
+    let(:service_expected_errors) { nil }
+    let(:service_double) { instance_double(MakeDrawTrainCarsTurn, call: service_result) }
+    let(:service_game) { Game.create(players: test_players) }
+
+    before do
+      expect(MakeDrawTrainCarsTurn).to receive(:new) { service_double }.with(player: service_game.players.first)
+    end
+
+    shared_examples "redirects to the game page with expected errors" do
+      it "redirects to the game page" do
+        expect(response).to redirect_to service_game
+      end
+
+      it "has the expected errors in the flash" do
+        expect(flash[:errors]).to eq service_expected_errors
+      end
+    end
+
+    it "calls MakeDrawTrainCarsTurn#call" do
+      expect(service_double).to receive(:call)
+      post_draw_train_cars
+    end
+
+    context "after making a request" do
+      before do
+        post_draw_train_cars
+      end
+
+      context "on draw success" do
+        include_examples "redirects to the game page with expected errors"
+      end
+
+      context "on draw failure" do
+        let(:service_result) { false }
+        let(:service_expected_errors) { [ GamesController::DRAW_TRAIN_CARS_FAILED_ERROR ] }
+
+        include_examples "redirects to the game page with expected errors"
+      end
+    end
+  end
+
   describe "POST create" do
-    let(:setup_game_result) { true }
-    let(:setup_game_errors) { {} }
-    let(:setup_game_game) { Game.new }
-    let(:setup_game_double) { instance_double(SetupGame, call: setup_game_result, errors: setup_game_errors, game: setup_game_game) }
+    def post_create
+      post :create, params: params
+    end
+
+    let(:service_result) { true }
+    let(:service_errors) { {} }
+    let(:service_game) { Game.new }
+
+    let(:service_double) do
+      instance_double(SetupGame,
+                      call: service_result,
+                      errors: service_errors,
+                      game: service_game)
+    end
     let(:player1_details) {
       {
         name: "Player 1",
@@ -31,16 +89,16 @@ describe GamesController do
       }
     }
 
-    def post_create
-      post :create, params: params
-    end
-
     before do
-      expect(SetupGame).to receive(:new) { setup_game_double }.with(player_details: { "player1" => player1_details, "player2" => player2_details } )
+      expect(SetupGame).to receive(:new) { service_double }
+        .with(player_details: {
+          "player1" => player1_details,
+          "player2" => player2_details
+        })
     end
 
     it "calls SetupGame#call" do
-      expect(setup_game_double).to receive(:call)
+      expect(service_double).to receive(:call)
       post_create
     end
 
@@ -50,24 +108,22 @@ describe GamesController do
       end
 
       it "redirects to the game page" do
-        expect(response).to redirect_to setup_game_game
+        expect(response).to redirect_to service_game
       end
     end
 
     context "on SetupGame error" do
-      before do
-        post_create
-      end
+      before { post_create }
 
-      let(:setup_game_result) { false }
-      let(:setup_game_errors) { { "player1" => ["Error!"] } }
+      let(:service_result) { false }
+      let(:service_errors) { { "player1" => ["Error!"] } }
 
       it "redirects to the new game page" do
         expect(response).to redirect_to :new_game
       end
 
       it "puts errors in the flash" do
-        expect(flash[:errors]).to equal setup_game_errors
+        expect(flash[:errors]).to equal service_errors
       end
     end
   end

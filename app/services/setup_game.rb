@@ -12,28 +12,28 @@ class SetupGame
 
   def call
     Game.transaction do
-      game_instance = Game.create
-      if game_instance.errors.any?
-        @errors["game"] = game_instance.errors.full_messages
-      end
+      game_instance = Game.create!
 
       @player_details.each do |player_key, player_params|
         player = Player.new(player_params.merge(game: game_instance, train_pieces: INITIAL_TRAIN_PIECES))
         player.save
-        if player.errors.any?
+
+        if player.errors.none?
+          deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
+          if !deal_train_car_result
+            @errors[player_key] ||= []
+            @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
+          end
+        else
           @errors[player_key] = player.errors.full_messages
-        elsif !DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
-          player_errors = errors = @errors[player_key] ||= []
-          player_errors.push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
         end
       end
 
       raise ActiveRecord::Rollback if @errors.any?
 
-      if @errors.none?
-        @game = game_instance
-      end
+      @game = game_instance
     end
+
     @errors.none?
   end
 end
