@@ -16,6 +16,7 @@ class DealTrainCars
         dealt_cards.push(DealtTrainCar.create(player: @player, train_car_type: train_car_type))
       end
     end
+
     dealt_cards
   end
 

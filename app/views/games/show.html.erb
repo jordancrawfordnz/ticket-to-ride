@@ -2,6 +2,14 @@
 
 <p id="notice"><%= notice %></p>
 
+<% if flash[:errors] %>
+  Errors:
+  <% flash[:errors].each do |error| %>
+    <div class="error">- <%= error %></div>
+  <% end %>
+  <br>
+<% end %>
+
 <h1><%= "#{@player.name} - #{@player.colour}" %></h1>
 You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> train pieces
 
@@ -11,5 +19,8 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
   <br>
 <% end %>
 
+<h2>My Turn</h2>
+<%= button_to 'Draw more cards', action: :draw_train_cars, id: @game.id %>
+
 <br>
-<%= link_to 'Back', games_path %>
+<%= link_to 'Back', games_path, action: :get %>

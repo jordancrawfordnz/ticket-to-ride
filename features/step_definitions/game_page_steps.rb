@@ -5,3 +5,7 @@ end
 When(/^the user sees they have (\d+) train pieces$/) do |expected_train_pieces|
   has_train_pieces(count: expected_train_pieces)
 end
+
+When(/^the user draws additional train cars$/) do
+  draw_train_cars
+end

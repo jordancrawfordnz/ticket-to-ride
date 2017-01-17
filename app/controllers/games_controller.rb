@@ -20,7 +20,6 @@ class GamesController < ApplicationController
 
   def create
     setup_game = SetupGame.new(player_details: player_details)
-    setup_game.call
 
     if setup_game.call
       redirect_to setup_game.game

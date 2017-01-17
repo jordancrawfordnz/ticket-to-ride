@@ -98,7 +98,7 @@ describe GamesController do
     end
 
     it "calls SetupGame#call" do
-      expect(service_double).to receive(:call)
+      expect(service_double).to receive(:call).once
       post_create
     end
 

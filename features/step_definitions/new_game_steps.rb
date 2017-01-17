@@ -19,3 +19,7 @@ When(/^a game with (\d+) players is setup$/) do |player_count|
     set_player_details(limit: player_count.to_i)
     click_button("Create Game")
 end
+
+Given(/^there are (\d+) train cars in the deck$/) do |remaining_train_cars|
+  set_test_train_car_deck(remaining_train_cars)
+end

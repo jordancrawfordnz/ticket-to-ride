@@ -24,3 +24,9 @@ end
 def on_game_page?
   expect(page.title).to eq "Game | Ticket to Ride"
 end
+
+def set_test_train_car_deck(remaining)
+  # byebug
+  TrainCarType.destroy_all
+  TrainCarType.create!(name: "Test Train Car", total: remaining)
+end
