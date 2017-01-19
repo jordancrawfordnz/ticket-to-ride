@@ -179,9 +179,14 @@ unique_route_instances = route_details.map do |route_details|
   pieces = route_details[3]
   repeat = route_details.length > 4 ? route_details[4] : 1
 
+  if (city1.id > city2.id)
+    temp_city = city1
+    city1 = city2
+    city2 = temp_city
+  end
+
   indexes = *(0...repeat)
   indexes.map do
-    # TODO: Setup colour on Route.
     Route.create!(city1: city1, city2: city2, pieces: pieces)
   end
 end

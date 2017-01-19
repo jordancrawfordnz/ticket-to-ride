@@ -1,7 +1,19 @@
 class Route < ApplicationRecord
   belongs_to :city1, class_name: 'City'
   belongs_to :city2, class_name: 'City'
-  validates :pieces, presence: true
 
-  # TODO: Enforce Routes are unique.
+  validates :pieces, presence: true
+  validate :cities_ordered_correctly
+
+  def cities_ordered_correctly
+    return if (!city1 || !city2)
+
+    if (!city1.id || !city2.id)
+      errors.add(:base, 'Both cities must have IDs.')
+    elsif (city1.id == city2.id)
+      errors.add(:base, 'Both cities must be different.')
+    elsif (city1.id > city2.id)
+      errors.add(:base, 'city1 must have a lower index than city2')
+    end
+  end
 end
