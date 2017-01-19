@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170112232334) do
+ActiveRecord::Schema.define(version: 20170117195445) do
+
+  create_table "cities", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "dealt_train_cars", force: :cascade do |t|
     t.integer  "player_id"
@@ -35,6 +41,16 @@ ActiveRecord::Schema.define(version: 20170112232334) do
     t.datetime "updated_at",   null: false
     t.integer  "train_pieces"
     t.index ["game_id"], name: "index_players_on_game_id"
+  end
+
+  create_table "routes", force: :cascade do |t|
+    t.integer  "pieces",     null: false
+    t.integer  "city1_id",   null: false
+    t.integer  "city2_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city1_id"], name: "index_routes_on_city1_id"
+    t.index ["city2_id"], name: "index_routes_on_city2_id"
   end
 
   create_table "train_car_types", force: :cascade do |t|

@@ -18,7 +18,7 @@ describe Player do
     end
   end
 
-  RSpec.shared_examples "player is invalid" do
+  shared_examples "player is invalid" do
     it "is invalid" do
       expect(player).not_to be_valid
     end
