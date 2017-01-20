@@ -54,7 +54,8 @@ describe City do
     context "when a route is defined" do
       let(:route_pieces) { 3 }
       let(:expected_routes) { [ route ] }
-      let(:route) { Route.new(pieces: route_pieces, city1: route_city1, city2: route_city2) }
+      let(:route_type) { RouteType.new(colour: "Green") }
+      let(:route) { Route.new(pieces: route_pieces, city1: route_city1, city2: route_city2, route_type: route_type) }
 
       before do
         route.save!

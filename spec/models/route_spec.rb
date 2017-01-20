@@ -3,9 +3,11 @@ require 'rails_helper'
 describe Route do
   let(:route) { Route.new(parameters) }
   let(:pieces) { 3 }
-  let(:parameters) { { city1: city1_saved, city2: city2_saved, pieces: pieces } }
+  let(:parameters) { { city1: city1_saved, city2: city2_saved, pieces: pieces, route_type: route_type } }
   let(:city1) { City.new({ name: "City 1" })}
   let(:city2) { City.new({ name: "City 2" })}
+  let(:route_type) { RouteType.new({ colour: "Green" }) }
+
   let(:city1_saved) do
     city1.save
     city1
@@ -42,6 +44,12 @@ describe Route do
 
     context "with no city2" do
       let(:city2_saved) { nil }
+
+      include_examples "route is invalid"
+    end
+
+    context "with no route type" do
+      let(:route_type) { nil }
 
       include_examples "route is invalid"
     end

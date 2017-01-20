@@ -1,8 +1,10 @@
 class Route < ApplicationRecord
   belongs_to :city1, class_name: 'City'
   belongs_to :city2, class_name: 'City'
+  belongs_to :route_type
 
   validates :pieces, presence: true
+
   validate :cities_ordered_correctly
 
   def cities_ordered_correctly
