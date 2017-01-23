@@ -18,4 +18,12 @@ class Route < ApplicationRecord
       errors.add(:base, 'city1 must have a lower index than city2')
     end
   end
+
+  def alternate_city(compare_city)
+    if city1 == compare_city
+      city2
+    elsif city2 == compare_city
+      city1
+    end
+  end
 end

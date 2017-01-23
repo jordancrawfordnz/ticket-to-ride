@@ -70,4 +70,32 @@ describe Route do
       include_examples "route is invalid"
     end
   end
+
+  describe "#alternate_city" do
+    let(:alternate_city) { route.alternate_city(compare_city) }
+
+    context "when getting the alternative to city1" do
+      let(:compare_city) { route.city1 }
+
+      it "the alternate is city2" do
+        expect(alternate_city).to eq route.city2
+      end
+    end
+
+    context "when getting the alternative to city2" do
+      let(:compare_city) { route.city2 }
+
+      it "the alternate is city1" do
+        expect(alternate_city).to eq route.city1
+      end
+    end
+
+    context "when comparing with a city not in the route" do
+      let(:compare_city) { City.new(name: "Banana Palace") }
+
+      it "the alternate is nil" do
+        expect(alternate_city).to eq nil
+      end
+    end
+  end
 end
