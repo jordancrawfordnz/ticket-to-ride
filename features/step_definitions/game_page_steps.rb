@@ -9,3 +9,7 @@ end
 When(/^the user draws additional train cars$/) do
   draw_train_cars
 end
+
+Then(/^the user sees a list of all avaliable routes between cities$/) do
+  has_list_of_avaliable_routes(count: Route.count * 2)
+end

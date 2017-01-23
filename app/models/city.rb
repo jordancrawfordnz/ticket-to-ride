@@ -6,4 +6,10 @@ class City < ApplicationRecord
   def routes
     Route.where(city1: self).or(Route.where(city2: self))
   end
+
+  def destinations
+    routes.map do |route|
+      route.alternate_city(self)
+    end
+  end
 end

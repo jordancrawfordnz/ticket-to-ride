@@ -19,6 +19,9 @@ describe City do
   let(:parameters) { { name: name } }
   let(:parameters_alt) { { name: name_alt } }
 
+  let(:route_pieces) { 3 }
+  let(:route_type) { RouteType.new(colour: "Green") }
+
   shared_examples "city is invalid" do
     it "is invalid" do
       expect(city).not_to be_valid
@@ -52,9 +55,7 @@ describe City do
     end
 
     context "when a route is defined" do
-      let(:route_pieces) { 3 }
       let(:expected_routes) { [ route ] }
-      let(:route_type) { RouteType.new(colour: "Green") }
       let(:route) { Route.new(pieces: route_pieces, city1: route_city1, city2: route_city2, route_type: route_type) }
 
       before do
@@ -73,6 +74,41 @@ describe City do
         let(:route_city2) { saved_city }
 
         include_examples "has expected routes"
+      end
+    end
+  end
+
+  describe "#destinations" do
+    shared_examples "has expected destinations" do
+      it "has the expected destinations" do
+        expect(compare_city.destinations).to eq expected_destinations
+      end
+    end
+
+    let(:compare_city) { saved_city }
+
+    context "with no routes" do
+      let(:expected_destinations) { [] }
+
+      include_examples "has expected destinations"
+    end
+
+    context "with a route between city and city_alt" do
+      before do
+        route = Route.create(pieces: route_pieces, city1: saved_city, city2: saved_city_alt, route_type: route_type)
+      end
+
+      context "then city" do
+        let(:expected_destinations) { [ saved_city_alt ] }
+
+        include_examples "has expected destinations"
+      end
+
+      context "then city_alt" do
+        let(:compare_city) { saved_city_alt }
+        let(:expected_destinations) { [ saved_city ] }
+
+        include_examples "has expected destinations"
       end
     end
   end

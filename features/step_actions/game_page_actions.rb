@@ -9,3 +9,7 @@ end
 def draw_train_cars
   click_button("Draw more cards")
 end
+
+def has_list_of_avaliable_routes(count:)
+  expect(page).to have_selector('.avaliable-route', count: count)
+end

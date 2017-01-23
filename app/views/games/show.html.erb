@@ -19,6 +19,19 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
   <br>
 <% end %>
 
+<h3>Avaliable Routes</h3>
+<% City.all.each do |city| %>
+  <strong><%= city.name %></strong><br>
+  <% city.routes.each do |route| %>
+    <div class="avaliable-route">
+      City: <%= route.alternate_city(city).name %><br>
+      Pieces: <%= route.pieces %><br>
+      Colour: <%= route.route_type.colour %><br>
+    </div>
+    <br>
+  <% end %>
+<% end %>
+
 <h2>My Turn</h2>
 <%= button_to 'Draw more cards', action: :draw_train_cars, id: @game.id %>
 
