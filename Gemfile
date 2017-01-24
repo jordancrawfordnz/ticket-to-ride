@@ -57,3 +57,5 @@ group :test do
   gem 'database_cleaner'
   gem 'selenium-webdriver'
 end
+
+gem 'query_diet', group: :development

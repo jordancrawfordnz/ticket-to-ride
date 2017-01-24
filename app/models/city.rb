@@ -4,7 +4,7 @@ class City < ApplicationRecord
   has_many :sources
 
   def routes
-    Route.where(city1: self).or(Route.where(city2: self))
+    Route.includes(:route_type, :city1, :city2).where(city1: self) + Route.includes(:route_type, :city1, :city2).where(city2: self)
   end
 
   def destinations
