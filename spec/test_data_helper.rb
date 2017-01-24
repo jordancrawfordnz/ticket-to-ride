@@ -3,14 +3,25 @@ def player_colours
 end
 
 def test_players
-  players = []
-  5.times.each do |player_index|
-    player = Player.new(name: "Player #{player_index + 1}", colour: player_colours[player_index], train_pieces: 45)
-    players.push(player)
+  5.times.map do |player_index|
+    Player.new(name: "Player #{player_index + 1}", colour: player_colours[player_index], train_pieces: 45)
   end
-  players
 end
 
 def test_game
   Game.create(players: test_players)
+end
+
+def test_cities
+  5.times.map do |city_index|
+    City.new(name: "City #{city_index + 1}")
+  end
+end
+
+def test_route_type
+  RouteType.new(colour: "Green")
+end
+
+def test_route
+  Route.new(city1: test_cities[0], city2: test_cities[1], pieces: 5, route_type: test_route_type)
 end

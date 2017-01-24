@@ -23,7 +23,6 @@ describe SetupGame do
 
   context "with valid players" do
     describe "#call" do
-      # TODO: These relate to the process of creating a game.
       it "returns true" do
         expect(setup_game_instance.call).to be true
       end

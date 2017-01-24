@@ -1,13 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
+require "spec_helper"
+require "test_data_helper"
 
 describe RouteClaim do
-  let(:city1) { City.new({ name: "City 1" })}
-  let(:city2) { City.new({ name: "City 2" })}
-  let(:route_type) { RouteType.new({ colour: "Green" }) }
-  let(:route) { Route.new(city1: city1, city2: city2, pieces: 5, route_type: route_type) }
-
-  let(:game) { Game.new }
-  let(:player) { Player.new(name: "Player 1", colour: "Green", game: game, train_pieces: 30) }
+  let(:route) { test_route }
+  let(:player) { test_players[0] }
 
   let(:parameters) { { route: route, player: player } }
   let(:route_claim) { RouteClaim.new(parameters) }
