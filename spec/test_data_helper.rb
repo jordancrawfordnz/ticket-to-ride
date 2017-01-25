@@ -8,6 +8,13 @@ def test_players
   end
 end
 
+def assign_train_cars(count:, player:, type: "Box")
+  count.times.map do
+    type = TrainCarType.find_by(name: type)
+    DealtTrainCar.create(train_car_type: type, player: player)
+  end
+end
+
 def test_game
   Game.create(players: test_players)
 end
@@ -24,4 +31,9 @@ end
 
 def test_route
   Route.new(city1: test_cities[0], city2: test_cities[1], pieces: 5, route_type: test_route_type)
+end
+
+def saved(to_save)
+  to_save.save
+  to_save
 end

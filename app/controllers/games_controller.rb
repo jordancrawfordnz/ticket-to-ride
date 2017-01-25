@@ -7,15 +7,12 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @player = @game.players.first
+    @player = current_player(@game)
   end
 
   def new
     @game = Game.new
     @player_count = 5
-  end
-
-  def edit
   end
 
   def create
@@ -34,11 +31,12 @@ class GamesController < ApplicationController
     redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
+  # TODO: Move this to a controller of its own (but under the same URL)
   # TODO: Could generalise this a bit more, e.g.: action.
     # Maybe this belongs somewhere else, something to do with turns perhaps.
   def draw_train_cars
     @game = Game.find(params[:id])
-    @player = @game.players.first
+    @player = current_player(@game)
 
     draw_train_cars_result = MakeDrawTrainCarsTurn.new(player: @player).call
     if !draw_train_cars_result
@@ -47,7 +45,28 @@ class GamesController < ApplicationController
     redirect_to @game
   end
 
+  # TODO: Move this to a controller of its own (but under the same URL)
+  def claim_route
+    @game = Game.find(params[:id])
+    @train_cars = params[:train_cars]
+    @player = current_player(@game)
+    @route = params[:route]
+
+    # TODO: Fill in the train car instances.
+    # TODO: Fill in the route.
+
+    service = ClaimRoute.new(player: @player, train_cars: @train_cars, route: @route)
+    if !service.call
+      flash[:errors] = service.errors
+    end
+    redirect_to @game
+  end
+
   private
+
+  def current_player(game)
+    game.players.first
+  end
 
   def clean_player_detail(player_detail)
     player_detail.transform_keys do |detail_key|
