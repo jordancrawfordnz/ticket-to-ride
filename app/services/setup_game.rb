@@ -15,11 +15,14 @@ class SetupGame
       game_instance = Game.create!
 
       @player_details.each do |player_key, player_params|
-        player = Player.new(player_params.merge(game: game_instance, train_pieces: INITIAL_TRAIN_PIECES))
-        player.save
+        full_player_params = player_params.merge(game: game_instance,
+                                                 train_pieces: INITIAL_TRAIN_PIECES)
+
+        player = Player.create(full_player_params)
 
         if player.errors.none?
           deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
+
           if !deal_train_car_result
             @errors[player_key] ||= []
             @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
@@ -33,7 +36,5 @@ class SetupGame
 
       @game = game_instance
     end
-
-    @errors.none?
   end
 end

@@ -3,8 +3,8 @@ require "spec_helper"
 
 describe SetupGame do
   shared_examples "does not save anything" do
-    it "returns false" do
-      expect(setup_game_instance.call).to be false
+    it "returns falsey" do
+      expect(setup_game_instance.call).to be_falsey
     end
 
     it "does not create any Players" do
@@ -23,8 +23,8 @@ describe SetupGame do
 
   context "with valid players" do
     describe "#call" do
-      it "returns true" do
-        expect(setup_game_instance.call).to be true
+      it "returns truthy" do
+        expect(setup_game_instance.call).to be_truthy
       end
 
       it "creates Players" do
