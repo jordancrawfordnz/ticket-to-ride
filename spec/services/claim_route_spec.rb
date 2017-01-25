@@ -3,7 +3,8 @@ require "spec_helper"
 require "test_data_helper"
 
 describe ClaimRoute do
-  let(:player) { Player.new(name: "Player", colour: player_colours[0], train_pieces: player_pieces) }
+  let(:game) { Game.create! }
+  let(:player) { Player.new(game: game, name: "Player", colour: player_colours[0], train_pieces: player_pieces) }
   let(:player_alt) { test_players[1] }
 
   let(:total_assigned_train_cars) { 10 }
@@ -24,6 +25,7 @@ describe ClaimRoute do
       total_assigned_train_cars.times do
         player.dealt_train_cars.push(DealtTrainCar.new(train_car_type: train_car_type))
       end
+      player.save!
     end
   end
 
@@ -149,7 +151,7 @@ describe ClaimRoute do
       end
 
       it "makes one route claim" do
-        expect { claim_route.call }.to change { RouteClaims.count }.by(1)
+        expect { claim_route.call }.to change { RouteClaim.count }.by(1)
       end
 
       it "reduces the player pieces by the route_pieces" do

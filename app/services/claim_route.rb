@@ -24,6 +24,14 @@ class ClaimRoute
     if @errors.any?
       return false
     end
+
+    @player.transaction do
+      RouteClaim.create!(route: @route, player: @player)
+      @player.train_pieces -= @route.pieces
+      @player.save!
+    end
+
+    true
   end
 
   private
@@ -37,7 +45,7 @@ class ClaimRoute
       @errors.push(INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED_MESSAGE)
     elsif @player.train_pieces < @route.pieces
       @errors.push(INCORRECT_NUMBER_OF_TRAIN_PIECES_MESSAGE)
-    elsif @player.dealt_train_cars.any? { |dealt_train_car| !@train_cars.include?(dealt_train_car) }
+    elsif !@train_cars.all? { |train_car| @player.dealt_train_cars.include?(train_car) }
       @errors.push(TRAIN_CARS_DONT_BELONG_TO_PLAYER_MESSAGE)
     end
   end
