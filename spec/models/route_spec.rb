@@ -71,6 +71,19 @@ describe Route do
     end
   end
 
+  context "with a route claimed" do
+    let(:player) { Player.new(name: "Player 1")}
+    let(:route_claim) { RouteClaim.new(player: player, route: route) }
+
+    before do
+      route_claim
+    end
+
+    it "claimed_route is not nil" do
+        expect(route.route_claim).not_to be nil
+    end
+  end
+
   describe "#alternate_city" do
     let(:alternate_city) { route.alternate_city(compare_city) }
 

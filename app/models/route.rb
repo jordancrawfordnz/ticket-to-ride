@@ -2,6 +2,7 @@ class Route < ApplicationRecord
   belongs_to :city1, class_name: 'City'
   belongs_to :city2, class_name: 'City'
   belongs_to :route_type
+  has_one :route_claim
 
   validates :pieces, presence: true
 
