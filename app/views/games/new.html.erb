@@ -3,8 +3,6 @@
 <h1>Ticket to Ride</h1>
 <h2>New Game</h2>
 
-<!-- TODO: list of players and their colours -->
-
 <%= form_for @game do |f| %>
   <% @player_count.times do |index| %>
     <%=f.fields_for "players" do |players_fields| %>
