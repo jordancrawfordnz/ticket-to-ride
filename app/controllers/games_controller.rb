@@ -45,23 +45,6 @@ class GamesController < ApplicationController
     redirect_to @game
   end
 
-  # TODO: Move this to a controller of its own (but under the same URL)
-  def claim_route
-    @game = Game.find(params[:id])
-    @train_cars = params[:train_cars]
-    @player = current_player(@game)
-    @route = params[:route]
-
-    # TODO: Fill in the train car instances.
-    # TODO: Fill in the route.
-
-    service = ClaimRoute.new(player: @player, train_cars: @train_cars, route: @route)
-    if !service.call
-      flash[:errors] = service.errors
-    end
-    redirect_to @game
-  end
-
   private
 
   def current_player(game)

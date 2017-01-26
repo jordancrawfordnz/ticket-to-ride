@@ -11,11 +11,11 @@ class Route < ApplicationRecord
   def cities_ordered_correctly
     return if (!city1 || !city2)
 
-    if (!city1.id || !city2.id)
+    if !city1.id || !city2.id
       errors.add(:base, 'Both cities must have IDs.')
-    elsif (city1.id == city2.id)
+    elsif city1.id == city2.id
       errors.add(:base, 'Both cities must be different.')
-    elsif (city1.id > city2.id)
+    elsif city1.id > city2.id
       errors.add(:base, 'city1 must have a lower index than city2')
     end
   end

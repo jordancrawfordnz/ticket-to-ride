@@ -31,7 +31,7 @@ class ClaimRoute
       @player.save!
     end
 
-    true
+    @errors.none?
   end
 
   private

@@ -51,48 +51,6 @@ describe GamesController do
     end
   end
 
-  describe "POST claim_route" do
-    def post_claim_route
-      post :claim_route, params: params
-    end
-
-    let(:route) { saved(test_route) }
-    let(:params) { { route: route.id, train_cars: train_cars.map(&:id) } }
-    let(:player) { game.players[0] }
-    let(:game) { Game.create(players: test_players) }
-    let(:train_cars) { assign_train_cars(count: 5, player: player) }
-    
-    let(:service_result) { true }
-    let(:service_expected_errors) { [] }
-    let(:service_double) { instance_double(ClaimRoute, call: service_result) }
-
-    before do
-      expect(ClaimRoute).to receive(:new) { service_double }.with(player: player, train_cars: train_cars, route: route)
-    end
-
-    it "calls MakeDrawTrainCarsTurn#call" do
-      expect(service_double).to receive(:call)
-      post_claim_route
-    end
-
-    context "after making a request" do
-      before do
-        post_draw_train_cars
-      end
-
-      context "on success success" do
-        include_examples "redirects to the game page with expected errors"
-      end
-
-      context "on draw failure" do
-        let(:service_result) { false }
-        let(:service_expected_errors) { [ClaimRoute::REQUIRED_PARAMETERS_NOT_PROVIDED_MESSAGE] }
-
-        include_examples "redirects to the game page with expected errors"
-      end
-    end
-  end
-
   describe "POST create" do
     def post_create
       post :create, params: params
