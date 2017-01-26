@@ -39,7 +39,7 @@ class ClaimRoute
   def check_params
     if @train_cars.length < 1
       @errors.push(NO_TRAIN_CARS_MESSAGE)
-    elsif !@route.route_claim.nil?
+    elsif @route.route_claim.present?
       @errors.push(ROUTE_ALREADY_TAKEN_MESSAGE)
     elsif @train_cars.length != @route.pieces
       @errors.push(INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED_MESSAGE)

@@ -14,14 +14,14 @@ describe ClaimRoute do
 
   let(:train_car_type) { TrainCarType.find_by(name: "Box") }
   let(:train_cars) do
-    if !player.nil?
+    if player.present?
       player.dealt_train_cars.first(total_train_cars)
     end
   end
   let(:route) { Route.new(city1: test_cities[0], city2: test_cities[1], pieces: route_pieces, route_type: test_route_type) }
 
   before do
-    if !player.nil?
+    if player.present?
       total_assigned_train_cars.times do
         player.dealt_train_cars.push(DealtTrainCar.new(train_car_type: train_car_type))
       end

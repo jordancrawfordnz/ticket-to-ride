@@ -6,7 +6,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find(params[:id])
+    @game = Game.find(params.require(:id))
     @player = current_player(@game)
   end
 
@@ -35,7 +35,7 @@ class GamesController < ApplicationController
   # TODO: Could generalise this a bit more, e.g.: action.
     # Maybe this belongs somewhere else, something to do with turns perhaps.
   def draw_train_cars
-    @game = Game.find(params[:id])
+    @game = Game.find(params.require(:id))
     @player = current_player(@game)
 
     draw_train_cars_result = MakeDrawTrainCarsTurn.new(player: @player).call
