@@ -16,8 +16,12 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
 <h3>My Train Car Cards</h3>
 <%= form_tag game_claim_route_index_path(@game) do |f| %>
   <% @player.dealt_train_cars.each do |dealt_train_car| %>
-    <%= check_box_tag "dealt_train_car_ids[]", dealt_train_car.id %>
-    <div class="train-car">- <%= dealt_train_car.train_car_type.name %></div>
+    <div class="train-car">
+      <label>
+        <%= check_box_tag "dealt_train_car_ids[]", dealt_train_car.id %>
+        <%= dealt_train_car.train_car_type.name %>
+      </label>
+    </div>
     <br>
   <% end %>
   <%= submit_tag "Deal Cards" %>

@@ -4,7 +4,20 @@ require "test_data_helper"
 
 describe ClaimRoute do
   let(:game) { Game.create! }
-  let(:player) { Player.new(game: game, name: "Player", colour: player_colours[0], train_pieces: player_pieces) }
+  let(:player) { Player.create(
+    game: game,
+    name: "Player",
+    colour: player_colours[0],
+    train_pieces: player_pieces,
+    dealt_train_cars: dealt_train_cars
+  )}
+
+  let(:dealt_train_cars) do
+    total_assigned_train_cars.times.map do
+      DealtTrainCar.new(train_car_type: train_car_type)
+    end
+  end
+
   let(:player_alt) { test_players[1] }
 
   let(:total_assigned_train_cars) { 10 }
@@ -19,15 +32,6 @@ describe ClaimRoute do
     end
   end
   let(:route) { Route.new(city1: test_cities[0], city2: test_cities[1], pieces: route_pieces, route_type: test_route_type) }
-
-  before do
-    if player.present?
-      total_assigned_train_cars.times do
-        player.dealt_train_cars.push(DealtTrainCar.new(train_car_type: train_car_type))
-      end
-      player.save!
-    end
-  end
 
   let(:parameters) { { player: player, train_cars: train_cars, route: route } }
   let(:claim_route) { ClaimRoute.new(parameters) }
@@ -76,6 +80,10 @@ describe ClaimRoute do
 
       it "does not change the players pieces" do
         expect { claim_route.call }.to change { player.train_pieces }.by(0)
+      end
+
+      it "does not change the players train cars" do
+        expect { claim_route.call }.to change { player.dealt_train_cars.length }.by(0)
       end
     end
 
@@ -145,6 +153,8 @@ describe ClaimRoute do
   end
 
   shared_examples "ClaimsRoute succeeds and actions the RouteClaim" do
+    before { claim_route } # ensures the let blocks are run before the delta comparisons
+
     describe "#call" do
       it "returns true" do
         expect(claim_route.call).to be true
@@ -156,6 +166,18 @@ describe ClaimRoute do
 
       it "reduces the player pieces by the route_pieces" do
         expect { claim_route.call }.to change { player.train_pieces }.by(-route_pieces)
+      end
+
+      it "reduces the number of DealtTrainCars by the route_pieces" do
+        expect { claim_route.call }.to change { DealtTrainCar.count }.by(-route_pieces)
+      end
+    end
+
+    context "after claiming a route" do
+      before { claim_route.call }
+
+      it "removes the nominated train cars to use from the players dealt train cars" do
+        expect(player.dealt_train_cars.to_a).to eq (dealt_train_cars - train_cars)
       end
     end
   end

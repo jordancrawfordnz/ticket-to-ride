@@ -28,6 +28,7 @@ class ClaimRoute
     @player.transaction do
       RouteClaim.create!(route: @route, player: @player)
       @player.train_pieces -= @route.pieces
+      @player.dealt_train_cars -= @train_cars
       @player.save!
     end
 
