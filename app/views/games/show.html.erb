@@ -33,6 +33,9 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
 <% end %>
 
 <h3>Avaliable Routes</h3>
+<!-- TODO: Move this to the controller!!! -->
+  <!-- TODO: How? If anything, the controller would just be able to pre-fetch everything but it would still have the same or a very similar structure. -->
+    <!-- TODO: This may change once routes becomes a proper association. -->
 <% City.all.each do |city| %>
   <strong><%= city.name %></strong><br>
   <% city.routes.each do |route| %>

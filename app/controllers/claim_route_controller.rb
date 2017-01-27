@@ -1,14 +1,27 @@
 class ClaimRouteController < ApplicationController
-  def create
-    @game = Game.find(params.require(:game_id))
-    @player = @game.players.first
-    @route = Route.find(params.require(:route_id))
-    @dealt_train_cars = params.require(:dealt_train_car_ids).map { |train_car_id| DealtTrainCar.find(train_car_id) }
+  ERROR_PREFIX = "Claim route: "
 
-    service = ClaimRoute.new(player: @player, train_cars: @dealt_train_cars, route: @route)
+  def create
+    game = game_param
+
+    service = ClaimRoute.new(player: game.current_player, train_cars: dealt_train_cars, route: route_param)
     if !service.call
-      flash[:errors] = service.errors
+      flash[:errors] = service.errors.map { |error_message| "#{ERROR_PREFIX}#{error_message}" }
     end
-    redirect_to @game
+    redirect_to game
+  end
+
+  private
+
+  def game_param
+    Game.find(params.require(:game_id))
+  end
+
+  def route_param
+    Route.find(params.require(:route_id))
+  end
+
+  def dealt_train_cars
+    params.require(:dealt_train_car_ids).map { |train_car_id| DealtTrainCar.find(train_car_id) }
   end
 end

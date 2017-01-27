@@ -3,7 +3,7 @@ class SetupGame
 
   INITIAL_DEAL_AMOUNT = 4
   INITIAL_TRAIN_PIECES = 45
-  NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE = "Could not deal to the player, there are not enough cards."
+  NOT_ENOUGH_CARDS_TO_DEAL = "Could not deal to the player, there are not enough cards."
 
   def initialize(player_details:)
     @player_details = player_details
@@ -25,7 +25,7 @@ class SetupGame
 
           if !deal_train_car_result
             @errors[player_key] ||= []
-            @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE)
+            @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
           end
         else
           @errors[player_key] = player.errors.full_messages

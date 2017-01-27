@@ -113,7 +113,7 @@ describe SetupGame do
 
       it "both players have errors" do
         ["player1", "player2"].each do |player_id|
-          expect(setup_game_instance.errors[player_id]).to include SetupGame::NOT_ENOUGH_CARDS_TO_DEAL_MESSAGE
+          expect(setup_game_instance.errors[player_id]).to include SetupGame::NOT_ENOUGH_CARDS_TO_DEAL
         end
       end
     end

@@ -3,8 +3,8 @@ require "spec_helper"
 require "test_data_helper"
 
 describe ClaimRoute do
-  let(:game) { Game.create! }
-  let(:player) { Player.create(
+  let(:game) { Game.new }
+  let(:player) { Player.new(
     game: game,
     name: "Player",
     colour: player_colours[0],
@@ -35,6 +35,10 @@ describe ClaimRoute do
 
   let(:parameters) { { player: player, train_cars: train_cars, route: route } }
   let(:claim_route) { ClaimRoute.new(parameters) }
+
+  before do
+    player.save! if player
+  end
 
   describe "on initialisation" do
     shared_examples "raises error on initialise" do
@@ -68,22 +72,22 @@ describe ClaimRoute do
     end
   end
 
-  shared_examples "ClaimRoute fails with error" do |expected_error_message|
+  shared_examples "returns false with error" do |expected_error_message|
     describe "#call" do
       it "returns false" do
         expect(claim_route.call).to be false
       end
 
       it "does not make any route claims" do
-        expect { claim_route.call }.to change { RouteClaim.count }.by(0)
+        expect { claim_route.call }.to_not change { RouteClaim.count }
       end
 
       it "does not change the players pieces" do
-        expect { claim_route.call }.to change { player.train_pieces }.by(0)
+        expect { claim_route.call }.to_not change { player.train_pieces }
       end
 
       it "does not change the players train cars" do
-        expect { claim_route.call }.to change { player.dealt_train_cars.length }.by(0)
+        expect { claim_route.call }.to_not change { player.dealt_train_cars.length }
       end
     end
 
@@ -99,7 +103,7 @@ describe ClaimRoute do
   context "with a train cars array of length 0" do
     let(:train_cars) { [] }
 
-    include_examples "ClaimRoute fails with error", ClaimRoute::NO_TRAIN_CARS_MESSAGE
+    include_examples "returns false with error", ClaimRoute::NO_TRAIN_CARS
   end
 
   context "with a train car that doesn't belong to the player" do
@@ -111,27 +115,27 @@ describe ClaimRoute do
 
     let(:train_cars) { player_alt.dealt_train_cars.first(total_train_cars) }
 
-    include_examples "ClaimRoute fails with error", ClaimRoute::TRAIN_CARS_DONT_BELONG_TO_PLAYER_MESSAGE
+    include_examples "returns false with error", ClaimRoute::TRAIN_CARS_DONT_BELONG_TO_PLAYER
   end
 
   context "with a too few train cars" do
     let(:route_pieces) { 5 }
     let(:total_train_cars) { route_pieces - 1 }
 
-    include_examples "ClaimRoute fails with error", ClaimRoute::INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED_MESSAGE
+    include_examples "returns false with error", ClaimRoute::INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED
   end
 
   context "with too many train cars" do
     let(:route_pieces) { 5 }
     let(:total_train_cars) { route_pieces + 1 }
 
-    include_examples "ClaimRoute fails with error", ClaimRoute::INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED_MESSAGE
+    include_examples "returns false with error", ClaimRoute::INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED
   end
 
   context "with a user with too few train pieces" do
     let(:player_pieces) { total_train_cars - 1 }
 
-    include_examples "ClaimRoute fails with error", ClaimRoute::INCORRECT_NUMBER_OF_TRAIN_PIECES_MESSAGE
+    include_examples "returns false with error", ClaimRoute::INCORRECT_NUMBER_OF_TRAIN_PIECES
   end
 
   context "when trying to claim a route that is already claimed" do
@@ -142,19 +146,17 @@ describe ClaimRoute do
     context "by another player" do
       let(:claim_player) { player_alt }
 
-      include_examples "ClaimRoute fails with error", ClaimRoute::ROUTE_ALREADY_TAKEN_MESSAGE
+      include_examples "returns false with error", ClaimRoute::ROUTE_ALREADY_TAKEN
     end
 
     context "by the same player" do
       let(:claim_player) { player }
 
-      include_examples "ClaimRoute fails with error", ClaimRoute::ROUTE_ALREADY_TAKEN_MESSAGE
+      include_examples "returns false with error", ClaimRoute::ROUTE_ALREADY_TAKEN
     end
   end
 
-  shared_examples "ClaimsRoute succeeds and actions the RouteClaim" do
-    before { claim_route } # ensures the let blocks are run before the delta comparisons
-
+  shared_examples "returns true and actions the RouteClaim" do
     describe "#call" do
       it "returns true" do
         expect(claim_route.call).to be true
@@ -183,12 +185,12 @@ describe ClaimRoute do
   end
 
   context "with a user with the correct number of pieces, train cars and on an unclaimed route" do
-    include_examples "ClaimsRoute succeeds and actions the RouteClaim"
+    include_examples "returns true and actions the RouteClaim"
   end
 
   context "with a user who has exactly the correct amount of train pieces" do
     let(:player_pieces) { total_train_cars }
 
-    include_examples "ClaimsRoute succeeds and actions the RouteClaim"
+    include_examples "returns true and actions the RouteClaim"
   end
 end

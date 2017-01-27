@@ -35,4 +35,20 @@ describe Game do
       end
     end
   end
+
+  describe "#current_player" do
+    context "when no players" do
+      let(:players) { [] }
+
+      it "should be nil" do
+        expect(game.current_player).to be nil
+      end
+    end
+
+    context "when there are players" do
+      it "should be equal to the first player" do
+        expect(game.current_player).to eq players[0]
+      end
+    end
+  end
 end

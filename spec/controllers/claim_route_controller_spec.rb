@@ -6,8 +6,8 @@ describe ClaimRouteController do
       expect(response).to redirect_to game
     end
 
-    it "has the expected errors in the flash" do
-      expect(flash[:errors]).to eq service_expected_errors
+    it "has the expected errors in the flash with error prefix" do
+      expect(flash[:errors]).to eq service_expected_errors_prefixed
     end
   end
 
@@ -24,6 +24,9 @@ describe ClaimRouteController do
 
     let(:service_result) { true }
     let(:service_expected_errors) { nil }
+    let(:service_expected_errors_prefixed) do
+     service_expected_errors.map { |message| ClaimRouteController::ERROR_PREFIX + message } if service_expected_errors
+    end
     let(:service_double) { instance_double(ClaimRoute, call: service_result, errors: service_expected_errors) }
 
     before do
@@ -46,11 +49,10 @@ describe ClaimRouteController do
 
       context "on ClaimRoute failure" do
         let(:service_result) { false }
-        let(:service_expected_errors) { [ClaimRoute::REQUIRED_PARAMETERS_NOT_PROVIDED_MESSAGE] }
+        let(:service_expected_errors) { [ClaimRoute::REQUIRED_PARAMETERS_NOT_PROVIDED] }
 
         include_examples "redirects to the game page with expected errors"
       end
     end
   end
-
 end
