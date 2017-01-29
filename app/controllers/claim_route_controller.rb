@@ -1,6 +1,12 @@
 class ClaimRouteController < ApplicationController
   ERROR_PREFIX = "Claim route: "
 
+  def new
+    @route = route_param
+    @game = game_param
+    @player = @game.current_player
+  end
+
   def create
     game = game_param
 
@@ -22,6 +28,7 @@ class ClaimRouteController < ApplicationController
   end
 
   def dealt_train_cars
-    params.require(:dealt_train_car_ids).map { |train_car_id| DealtTrainCar.find(train_car_id) }
+    train_car_ids = params[:dealt_train_car_ids] || []
+    train_car_ids.map { |train_car_id| DealtTrainCar.find(train_car_id) }
   end
 end

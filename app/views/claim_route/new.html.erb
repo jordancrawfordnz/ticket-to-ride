@@ -1,0 +1,22 @@
+<% content_for :title, "Claim a route" %>
+
+<h1>Claim a route</h1>
+
+<h2>Between <%= @route.city1.name %> and <%= @route.city2.name %></h2>
+<strong>Colour:</strong> <%= @route.route_type.colour %><br>
+<strong>Pieces:</strong> <%= @route.pieces %>
+
+<h2>Train Pieces to Use</h2>
+<%= form_tag game_claim_route_index_path(@game) do |f| %>
+  <%= hidden_field_tag :route_id, @route.id %>
+  <% @player.dealt_train_cars.each do |dealt_train_car| %>
+    <div class="train-car">
+      <label>
+        <%= check_box_tag "dealt_train_car_ids[]", dealt_train_car.id %>
+        <%= dealt_train_car.train_car_type.name %>
+      </label>
+    </div>
+    <br>
+  <% end %>
+  <%= submit_tag "Deal Cards" %>
+<% end %>

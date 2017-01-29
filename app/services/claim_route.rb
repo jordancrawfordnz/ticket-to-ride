@@ -2,7 +2,7 @@ class ClaimRoute
   REQUIRED_PARAMETERS_NOT_PROVIDED = "A required parameter was not provided."
   NO_TRAIN_CARS = "No train cars were provided to use for the route."
   TRAIN_CARS_DONT_BELONG_TO_PLAYER = "Not all the provided train cars belong to the player."
-  INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED = "Not enough train cars were provided."
+  INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED = "The incorrect number of train cars were provided."
   INCORRECT_NUMBER_OF_TRAIN_PIECES = "Player does not have enough train pieces."
   ROUTE_ALREADY_TAKEN = "The route has already been taken."
 

@@ -14,23 +14,16 @@
 You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> train pieces
 
 <h3>My Train Car Cards</h3>
-<%= form_tag game_claim_route_index_path(@game) do |f| %>
-  <% @player.dealt_train_cars.each do |dealt_train_car| %>
-    <div class="train-car">
-      <label>
-        <%= check_box_tag "dealt_train_car_ids[]", dealt_train_car.id %>
-        <%= dealt_train_car.train_car_type.name %>
-      </label>
-    </div>
-    <br>
-  <% end %>
-  <%= submit_tag "Deal Cards" %>
-<% end %>
-
 <% @player.dealt_train_cars.each do |dealt_train_car| %>
   <div class="train-car">- <%= dealt_train_car.train_car_type.name %></div>
   <br>
 <% end %>
+
+<h2>My Turn</h2>
+<%= button_to 'Draw more cards', action: :draw_train_cars, id: @game.id %>
+
+<br>
+<%= link_to 'Back', games_path, action: :get %>
 
 <h3>Avaliable Routes</h3>
 <!-- TODO: Move this to the controller!!! -->
@@ -43,13 +36,15 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
       City: <%= route.alternate_city(city).name %><br>
       Pieces: <%= route.pieces %><br>
       Colour: <%= route.route_type.colour %><br>
+      <% if route.route_claim %>
+        Claimed by <%= route.route_claim.player.name %>
+      <% else %>
+        <%= form_tag new_game_claim_route_path(@game), method: :get do %>
+          <%= hidden_field_tag :route_id, route.id %>
+          <%= submit_tag "Claim Route", name: nil %>
+        <% end %>
+      <% end %>
     </div>
     <br>
   <% end %>
 <% end %>
-
-<h2>My Turn</h2>
-<%= button_to 'Draw more cards', action: :draw_train_cars, id: @game.id %>
-
-<br>
-<%= link_to 'Back', games_path, action: :get %>
