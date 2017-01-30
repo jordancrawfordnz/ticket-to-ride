@@ -25,22 +25,19 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
 <br>
 <%= link_to 'Back', games_path, action: :get %>
 
-<h3>Avaliable Routes</h3>
-<!-- TODO: Move this to the controller!!! -->
-  <!-- TODO: How? If anything, the controller would just be able to pre-fetch everything but it would still have the same or a very similar structure. -->
-    <!-- TODO: This may change once routes becomes a proper association. -->
-<% City.all.each do |city| %>
-  <strong><%= city.name %></strong><br>
-  <% city.routes.each do |route| %>
-    <div class="avaliable-route">
-      City: <%= route.alternate_city(city).name %><br>
-      Pieces: <%= route.pieces %><br>
-      Colour: <%= route.route_type.colour %><br>
-      <% if route.route_claim %>
-        Claimed by <%= route.route_claim.player.name %>
+<h3>Available Routes</h3>
+<% @all_routes.each do |city| %>
+  <strong><%= city[:name] %></strong>
+  <% city[:destinations].each do |destination| %>
+    <div class="available-route">
+      City: <%= destination[:name] %><br>
+      Pieces: <%= destination[:pieces] %><br>
+      Colour: <%= destination[:route_colour] %><br>
+      <% if destination[:is_claimed?] %>
+        <%= destination[:claimed_player] %>
       <% else %>
         <%= form_tag new_game_claim_route_path(@game), method: :get do %>
-          <%= hidden_field_tag :route_id, route.id %>
+          <%= hidden_field_tag :route_id, destination[:route_id] %>
           <%= submit_tag "Claim Route", name: nil %>
         <% end %>
       <% end %>

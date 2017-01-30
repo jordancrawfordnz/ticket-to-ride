@@ -1,12 +1,11 @@
 class City < ApplicationRecord
   validates :name, presence: true
-  has_many :destinations
-  has_many :sources
-
-  # TODO: When I get a chance, make routes into a proper relation. This may be difficult!
+  has_many :where_city_1, foreign_key: :city1_id, class_name: 'Route'
+  has_many :where_city_2, foreign_key: :city2_id, class_name: 'Route'
 
   def routes
-    Route.includes(:route_type, :city1, :city2).where(city1: self) + Route.includes(:route_type, :city1, :city2).where(city2: self)
+    fields_to_include = [:route_type, :city1, :city2, :route_claim]
+    where_city_1.includes(fields_to_include) + where_city_2.includes(fields_to_include)
   end
 
   def destinations

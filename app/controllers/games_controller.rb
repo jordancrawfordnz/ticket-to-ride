@@ -8,6 +8,26 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params.require(:id))
     @player = @game.current_player
+
+    fields_to_include = [:route_type, :city1, :city2, :route_claim]
+    @all_routes = City.all.includes(where_city_1: fields_to_include, where_city_2: fields_to_include).map do |city|
+      city_details = {}
+      city_details[:name] = city.name
+      destination_routes = city.where_city_1 + city.where_city_2
+      city_details[:destinations] = destination_routes.map do |destination_route|
+        destination = {}
+        destination[:name] = destination_route.alternate_city(city).name
+        destination[:pieces] = destination_route.pieces
+        destination[:route_id] = destination_route.id
+        destination[:route_colour] = destination_route.route_type.colour
+        destination[:is_claimed?] = destination_route.route_claim.present?
+        if destination[:is_claimed?]
+          destination[:claimed_player] = destination_route.route_claim.player
+        end
+        destination
+      end
+      city_details
+    end
   end
 
   def new
