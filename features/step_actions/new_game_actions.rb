@@ -20,13 +20,3 @@ end
 def set_player_colour(player_id)
   select(player_colours[player_id], from: "game_players_player_#{player_id}_colour")
 end
-
-def on_game_page?
-  expect(page.title).to eq "Game | Ticket to Ride"
-end
-
-def set_test_train_car_deck(remaining)
-  # byebug
-  TrainCarType.destroy_all
-  TrainCarType.create!(name: "Test Train Car", total: remaining)
-end

@@ -11,15 +11,16 @@ When(/^the user fills in details about (\d+) players and (\d+) without a player 
 end
 
 Then(/^the user is on (?:the|a) game page$/) do
-  on_game_page?
+  expect(page.title).to eq "Game | Ticket to Ride"
 end
 
 When(/^a game with (\d+) players is setup$/) do |player_count|
-    visit_root_page
+    visit('/')
     set_player_details(limit: player_count.to_i)
     click_button("Create Game")
 end
 
 Given(/^there are (\d+) train cars in the deck$/) do |remaining_train_cars|
-  set_test_train_car_deck(remaining_train_cars)
+  TrainCarType.destroy_all
+  TrainCarType.create!(name: "Test Train Car", total: remaining_train_cars  )
 end

@@ -1,5 +1,5 @@
 When(/^the user is on the root page$/) do
-  visit_root_page
+  visit('/')
 end
 
 When(/^clicks the "([^"]*)" button$/) do |text|
