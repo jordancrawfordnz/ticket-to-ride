@@ -97,11 +97,11 @@ describe DealTrainCars do
       end
 
       it "randomly assigns train cards" do
-        # "Randomly" but in this exact order due to the srand.
-        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type1
-        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type1
-        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type1
-        expect(DealTrainCars.new(parameters).call.first.train_car_type).to eq train_car_type2
+        4.times do
+          call_result = DealTrainCars.new(parameters).call
+          expect(call_result).not_to be false
+          expect(call_result.first.train_car_type).to be_in([train_car_type1, train_car_type2])
+        end
       end
     end
   end
