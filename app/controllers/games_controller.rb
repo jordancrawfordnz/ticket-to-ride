@@ -7,7 +7,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params.require(:id))
-    @player = current_player(@game)
+    @player = @game.current_player
   end
 
   def new
@@ -36,7 +36,7 @@ class GamesController < ApplicationController
     # Maybe this belongs somewhere else, something to do with turns perhaps.
   def draw_train_cars
     @game = Game.find(params.require(:id))
-    @player = current_player(@game)
+    @player = @game.current_player
 
     draw_train_cars_result = MakeDrawTrainCarsTurn.new(player: @player).call
     if !draw_train_cars_result
@@ -46,10 +46,6 @@ class GamesController < ApplicationController
   end
 
   private
-
-  def current_player(game)
-    game.players.first
-  end
 
   def clean_player_detail(player_detail)
     player_detail.transform_keys do |detail_key|
