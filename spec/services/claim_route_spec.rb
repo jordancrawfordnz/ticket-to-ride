@@ -4,13 +4,15 @@ require "test_data_helper"
 
 describe ClaimRoute do
   let(:game) { Game.new }
-  let(:player) { Player.new(
-    game: game,
-    name: "Player",
-    colour: player_colours[0],
-    train_pieces: player_pieces,
-    dealt_train_cars: dealt_train_cars
-  )}
+  let(:player) do
+    Player.new(
+      game: game,
+      name: "Player",
+      colour: player_colours[0],
+      train_pieces: player_pieces,
+      dealt_train_cars: dealt_train_cars
+    )
+  end
 
   let(:dealt_train_cars) do
     total_assigned_train_cars.times.map do
