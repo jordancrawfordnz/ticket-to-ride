@@ -10,7 +10,7 @@ When(/^the user fills in details about (\d+) players and (\d+) without a player 
   end
 end
 
-Then(/^the user is on (?:the|a) game page$/) do
+Then(/^the player is on (?:the|a) game page$/) do
   expect(page.title).to eq "Game | Ticket to Ride"
 end
 

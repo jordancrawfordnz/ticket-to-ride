@@ -10,6 +10,6 @@ When(/^clicks the "([^"]*)" link$/) do |text|
   click_link(text)
 end
 
-Then(/^the user sees an error "([^"]*)"$/) do |error_text|
+Then(/^the (?:user|player) sees an error "(.*)"$/) do |error_text|
   expect(page).to have_content error_text
 end

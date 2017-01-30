@@ -1,5 +1,5 @@
-Feature: The user can see available routes between cities.
-  Scenario: A new game shows all available routes.
+Feature: A player can see available routes between cities.
+  Scenario: On a new game, a player can see all their avaliable routes.
     Given a game with 5 players is setup
-    And the user is on the game page
-    Then the user sees a list of all available routes between cities
+    And the player is on the game page
+    Then the player sees the destinations from each city listed
