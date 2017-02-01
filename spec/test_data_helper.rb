@@ -16,7 +16,7 @@ def assign_train_cars(count:, player:, type: "Box")
 end
 
 def test_game
-  Game.create(players: test_players)
+  Game.create!(players: test_players)
 end
 
 def test_cities
