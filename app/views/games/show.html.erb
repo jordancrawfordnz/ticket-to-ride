@@ -36,7 +36,7 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
           Pieces: <%= destination[:pieces] %><br>
           Colour: <%= destination[:route_colour] %><br>
           <% if destination[:is_claimed?] %>
-            <%= destination[:claimed_player] %>
+            Claimed by <%= destination[:claimed_player].name %>
           <% else %>
             <%= form_tag new_game_claim_route_path(@game), method: :get do %>
               <%= hidden_field_tag :route_id, destination[:route_id] %>

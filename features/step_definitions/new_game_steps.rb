@@ -29,7 +29,6 @@ When(/^a game with (\d+) players is setup$/) do |player_count|
   setup_game = SetupGame.new(player_details: player_details)
   expect(setup_game.call).to be_truthy
   @game = setup_game.game
-  puts "game setup done"
 end
 
 Given(/^there are (\d+) train cars in the deck$/) do |remaining_train_cars|

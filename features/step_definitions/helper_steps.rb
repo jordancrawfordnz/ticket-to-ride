@@ -2,12 +2,12 @@ When(/^the user is on the root page$/) do
   visit('/')
 end
 
-When(/^clicks the "([^"]*)" button$/) do |text|
-  click_button(text)
+When(/^the (?:user|player) clicks the "([^"]*)" link$/) do |text|
+  click_link(text)
 end
 
-When(/^clicks the "([^"]*)" link$/) do |text|
-  click_link(text)
+When(/^the (?:user|player) clicks the "([^"]*)" button$/) do |text|
+  click_button(text)
 end
 
 Then(/^the (?:user|player) sees an error "(.*)"$/) do |error_text|

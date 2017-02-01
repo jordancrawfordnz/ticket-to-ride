@@ -37,7 +37,11 @@ Given(/^the player has (\d+) "([^"]*)" train cars$/) do |count, card_type|
 end
 
 When(/^the player clicks the claim route button on a route between "([^"]*)" and "([^"]*)"$/) do |city1_name, city2_name|
-  route_element = find('.route strong', text: city1_name).find(:xpath, '..')
-  destination = route_element.find('.destination', text: "Calgary")
-  destination.click_button("Claim Route")
+  find_game_page_destination(city1_name, city2_name).click_button("Claim Route")
+end
+
+Then(/^the player sees the route from "([^"]*)" to "([^"]*)" claimed with their name$/) do |city1_name, city2_name|
+  player = @game.current_player
+  destination = find_game_page_destination(city1_name, city2_name)
+  expect(destination).to have_content "Claimed by #{player.name}"
 end
