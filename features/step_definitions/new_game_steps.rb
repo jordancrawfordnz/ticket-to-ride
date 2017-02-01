@@ -10,14 +10,26 @@ When(/^the user fills in details about (\d+) players and (\d+) without a player 
   end
 end
 
+Given(/^the player navigates to the game page$/) do
+  visit("/games/#{@game.id}")
+end
+
 Then(/^the player is on (?:the|a) game page$/) do
   expect(page.title).to eq "Game | Ticket to Ride"
 end
 
 When(/^a game with (\d+) players is setup$/) do |player_count|
-    visit('/')
-    set_player_details(limit: player_count.to_i)
-    click_button("Create Game")
+  player_details = player_count.to_i.times.with_object({}) do |player_index, players|
+    players["player#{player_index}"] = {
+      name: player_name(player_index),
+      colour: player_colour(player_index)
+    }
+  end
+
+  setup_game = SetupGame.new(player_details: player_details)
+  expect(setup_game.call).to be_truthy
+  @game = setup_game.game
+  puts "game setup done"
 end
 
 Given(/^there are (\d+) train cars in the deck$/) do |remaining_train_cars|

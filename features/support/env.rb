@@ -58,6 +58,7 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # Clean the database before and after each scenario
 Before do
+  Rails.application.load_seed
   DatabaseCleaner.start
 end
 

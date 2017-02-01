@@ -13,3 +13,7 @@ end
 Then(/^the (?:user|player) sees an error "(.*)"$/) do |error_text|
   expect(page).to have_content error_text
 end
+
+Then(/^the (?:user|player) sees the text "(.*)"$/) do |text|
+  expect(page).to have_content text
+end

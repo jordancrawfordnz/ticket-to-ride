@@ -6,6 +6,15 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# TODO: Move away from using seeds in tests!
+Game.destroy_all
+City.destroy_all
+RouteType.destroy_all
+Player.destroy_all
+Route.destroy_all
+TrainCarType.destroy_all
+DealtTrainCar.destroy_all
+
 # Setup the train car types.
 [
   { name: "Locomotive", total: 14 },
