@@ -8,11 +8,11 @@ describe SetupGame do
     end
 
     it "does not create any Players" do
-      expect { setup_game_instance.call }.to change { Player.count }.by(0)
+      expect { setup_game_instance.call }.not_to change { Player.count }
     end
 
     it "does not create any Games" do
-      expect { setup_game_instance.call }.to change { Game.count }.by(0)
+      expect { setup_game_instance.call }.not_to change { Game.count }
     end
   end
 

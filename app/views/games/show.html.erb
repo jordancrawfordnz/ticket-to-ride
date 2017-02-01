@@ -25,23 +25,27 @@ You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> 
 <br>
 <%= link_to 'Back', games_path, action: :get %>
 
-<h3>Available Routes</h3>
-<% @all_routes.each do |city| %>
-  <strong><%= city[:name] %></strong>
-  <% city[:destinations].each do |destination| %>
-    <div class="available-route">
-      City: <%= destination[:name] %><br>
-      Pieces: <%= destination[:pieces] %><br>
-      Colour: <%= destination[:route_colour] %><br>
-      <% if destination[:is_claimed?] %>
-        <%= destination[:claimed_player] %>
-      <% else %>
-        <%= form_tag new_game_claim_route_path(@game), method: :get do %>
-          <%= hidden_field_tag :route_id, destination[:route_id] %>
-          <%= submit_tag "Claim Route", name: nil %>
-        <% end %>
+<h3>Routes</h3>
+<div class="routes">
+  <% @all_routes.each do |city| %>
+    <div class="route">
+      <strong><%= city[:name] %></strong>
+      <% city[:destinations].each do |destination| %>
+        <div class="destination">
+          City: <%= destination[:name] %><br>
+          Pieces: <%= destination[:pieces] %><br>
+          Colour: <%= destination[:route_colour] %><br>
+          <% if destination[:is_claimed?] %>
+            <%= destination[:claimed_player] %>
+          <% else %>
+            <%= form_tag new_game_claim_route_path(@game), method: :get do %>
+              <%= hidden_field_tag :route_id, destination[:route_id] %>
+              <%= submit_tag "Claim Route", name: nil %>
+            <% end %>
+          <% end %>
+        </div>
+        <br>
       <% end %>
     </div>
-    <br>
   <% end %>
-<% end %>
+</div>

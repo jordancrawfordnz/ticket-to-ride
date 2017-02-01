@@ -43,7 +43,7 @@ describe DealTrainCars do
         end
 
         it "does not issue any cards" do
-          expect { deal_train_cards.call }.to change { player.dealt_train_cars.count }.by(0)
+          expect { deal_train_cards.call }.not_to change { player.dealt_train_cars.count }
         end
       end
 
