@@ -15,7 +15,7 @@ Route.destroy_all
 TrainCarType.destroy_all
 DealtTrainCar.destroy_all
 
-COLOURS = {
+COLOURS ||= {
   multi: "Multi",
   purple: "Purple",
   white: "White",
@@ -87,20 +87,22 @@ city_instances = cities.transform_values do |city_name|
   City.create!(name: city_name)
 end
 
-route_colours = [
-                :grey,
-                :white,
-                :yellow,
-                :purple,
-                :green,
-                :red,
-                :orange,
-                :blue,
-                :black
-              ]
+route_types = {
+                grey: { accepts_all_train_cars: true },
+                white: nil,
+                yellow: nil,
+                purple: nil,
+                green: nil,
+                red: nil,
+                orange: nil,
+                blue: nil,
+                black: nil
+              }
 
-route_type_instances = route_colours.each.with_object({}) do |colour, route_type_instances|
-  route_type_instances[colour] = RouteType.create!(colour: COLOURS[colour])
+route_type_instances = route_types.each.with_object({}) do |(colour_key, type_params), route_type_instances|
+  route_params = { colour: COLOURS[colour_key] }
+  route_params.merge!(type_params) if type_params
+  route_type_instances[colour_key] = RouteType.create!(route_params)
 end
 
 # Setup routes between cities.

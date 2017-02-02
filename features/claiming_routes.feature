@@ -8,7 +8,7 @@ Feature: A player can use their turn to claim a route.
     Then the player is on the claim route page
     And the player sees a list of their train cars on the claim route page
     And the player sees the text "Between Vancouver and Calgary"
-    And the player sees the text "Colour: Gray"
+    And the player sees the text "Colour: Grey"
     And the player sees the text "Pieces: 3"
 
   Scenario: The player uses their turn to claim a route and the route appears as claimed.

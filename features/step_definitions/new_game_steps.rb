@@ -33,5 +33,5 @@ end
 
 Given(/^there are (\d+) train cars in the deck$/) do |remaining_train_cars|
   TrainCarType.destroy_all
-  TrainCarType.create!(name: "Test Train Car", total: remaining_train_cars  )
+  TrainCarType.create!(name: "Test Train Car", total: remaining_train_cars, colour: "Green"  )
 end
