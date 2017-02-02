@@ -5,6 +5,13 @@ class ClaimRoute
   INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED = "The incorrect number of train cars were provided."
   INCORRECT_NUMBER_OF_TRAIN_PIECES = "Player does not have enough train pieces."
   ROUTE_ALREADY_TAKEN = "The route has already been taken."
+  PIECES_TO_SCORE = {
+                      1 => 1,
+                      2 => 2,
+                      3 => 4,
+                      5 => 10,
+                      6 => 15
+                    }
 
   attr_reader :errors
 
@@ -29,6 +36,7 @@ class ClaimRoute
       RouteClaim.create!(route: @route, player: @player)
       @player.train_pieces -= @route.pieces
       @player.dealt_train_cars -= @train_cars
+      @player.score += PIECES_TO_SCORE[@route.pieces]
       @player.save!
     end
 

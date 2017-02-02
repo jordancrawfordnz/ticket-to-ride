@@ -92,6 +92,10 @@ describe ClaimRoute do
       it "does not change the players train cars" do
         expect { claim_route.call }.to_not change { player.dealt_train_cars.length }
       end
+
+      it "does not change the players score" do
+        expect { claim_route.call }.not_to change { player.score }
+      end
     end
 
     context "after trying to claim a route" do
@@ -175,6 +179,10 @@ describe ClaimRoute do
 
       it "reduces the number of DealtTrainCars by the route_pieces" do
         expect { claim_route.call }.to change { DealtTrainCar.count }.by(-route_pieces)
+      end
+
+      it "increases the players score" do
+        expect { claim_route.call }.to change { player.score }.by(ClaimRoute::PIECES_TO_SCORE[route.pieces])
       end
     end
 

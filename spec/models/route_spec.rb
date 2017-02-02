@@ -23,15 +23,43 @@ describe Route do
     end
   end
 
+  shared_examples "route is valid" do
+    it "is valid" do
+      expect(route).to be_valid
+    end
+  end
+
   describe "on initialize" do
     context "with valid params" do
-      it "is valid" do
-        expect(route).to be_valid
-      end
+      include_examples "route is valid"
     end
 
     context "with no pieces" do
       let(:pieces) { nil }
+
+      include_examples "route is invalid"
+    end
+
+    context "with 0 pieces" do
+      let(:pieces) { 0 }
+
+      include_examples "route is invalid"
+    end
+
+    context "with less than 0 pieces" do
+      let(:pieces) { -20 }
+
+      include_examples "route is invalid"
+    end
+
+    context "with 6 pieces" do
+      let(:pieces) { 6 }
+
+      include_examples "route is valid"
+    end
+
+    context "with 7 pieces" do
+      let(:pieces) { 7 }
 
       include_examples "route is invalid"
     end
@@ -104,7 +132,7 @@ describe Route do
     end
 
     context "when comparing with a city not in the route" do
-      let(:compare_city) { City.new(name: "Banana Palace") }
+      let(:compare_city) { City.new(name: "City") }
 
       it "the alternate is nil" do
         expect(alternate_city).to eq nil

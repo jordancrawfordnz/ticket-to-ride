@@ -4,7 +4,10 @@ class Route < ApplicationRecord
   belongs_to :route_type
   has_one :route_claim
 
-  validates :pieces, presence: true
+  validates :pieces, presence: true,
+    :numericality => { :greater_than => 0,
+                       :less_than_or_equal_to => 6
+                     }
 
   validate :cities_ordered_correctly
 
