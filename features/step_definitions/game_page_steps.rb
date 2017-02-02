@@ -45,3 +45,8 @@ Then(/^the player sees the route from "([^"]*)" to "([^"]*)" claimed with their 
   destination = find_game_page_destination(city1_name, city2_name)
   expect(destination).to have_content "Claimed by #{player.name}"
 end
+
+Then(/^the player sees their score on the page$/) do
+  player = @game.current_player
+  expect(page).to have_content "Score: #{player.score}"
+end

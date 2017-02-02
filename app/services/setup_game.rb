@@ -3,6 +3,7 @@ class SetupGame
 
   INITIAL_DEAL_AMOUNT = 4
   INITIAL_TRAIN_PIECES = 45
+  INITIAL_SCORE = 0
   NOT_ENOUGH_CARDS_TO_DEAL = "Could not deal to the player, there are not enough cards."
 
   def initialize(player_details:)
@@ -16,7 +17,8 @@ class SetupGame
 
       @player_details.each do |player_key, player_params|
         full_player_params = player_params.merge(game: game_instance,
-                                                 train_pieces: INITIAL_TRAIN_PIECES)
+                                                 train_pieces: INITIAL_TRAIN_PIECES,
+                                                 score: INITIAL_SCORE)
 
         player = Player.create(full_player_params)
 

@@ -4,7 +4,7 @@ end
 
 def test_players
   5.times.map do |player_index|
-    Player.new(name: "Player #{player_index + 1}", colour: player_colours[player_index], train_pieces: 45)
+    Player.new(name: "Player #{player_index + 1}", colour: player_colours[player_index], train_pieces: 45, score: 0)
   end
 end
 

@@ -1,5 +1,5 @@
 Feature: A user can create a new game
-  Scenario:  The user is taken to the game page upon creating a new game
+  Scenario: The user is taken to the game page upon creating a new game
     Given the user is on the root page
     When the user inputs details about 5 players
     And the user clicks the "Create Game" button

@@ -10,7 +10,8 @@ describe ClaimRoute do
       name: "Player",
       colour: player_colours[0],
       train_pieces: player_pieces,
-      dealt_train_cars: dealt_train_cars
+      dealt_train_cars: dealt_train_cars,
+      score: 0
     )
   end
 

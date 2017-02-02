@@ -11,7 +11,13 @@
 <% end %>
 
 <h1><%= "#{@player.name} - #{@player.colour}" %></h1>
-You have <strong class="train-piece-count"><%= @player.train_pieces %></strong> train pieces
+<span class="train-piece-count">
+  <strong>Train Pieces:</strong> <%= @player.train_pieces %>
+</span>
+<br>
+<span class="score">
+  <strong>Score:</strong> <%= @player.score %>
+</span>
 
 <h3>My Train Car Cards</h3>
 <% @player.dealt_train_cars.each do |dealt_train_car| %>
