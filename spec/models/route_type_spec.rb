@@ -18,6 +18,14 @@ describe RouteType do
       end
     end
 
+    context "when accepts all train cars" do
+      let(:params) { { colour: colour, accepts_all_train_cars: true } }
+
+      it "is valid" do
+        expect(route_type).to be_valid
+      end
+    end
+
     context "with no colour" do
       let(:colour) { nil }
 

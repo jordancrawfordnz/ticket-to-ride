@@ -11,7 +11,7 @@ describe DealTrainCars do
   describe "#call" do
     context "with one type of train car" do
       let(:total_cards) { 3 }
-      let(:train_car_type_params) { { name: "Test Car", total: total_cards } }
+      let(:train_car_type_params) { { name: "Test Car", total: total_cards, colour: "Red" } }
       let(:assigned_cards) { 0 }
 
       before do
@@ -81,8 +81,8 @@ describe DealTrainCars do
     end
 
     context "with two types of train card" do
-      let(:train_car_type1_params) { { name: "Test Car 1", total: 3 } }
-      let(:train_car_type2_params) { { name: "Test Car 2", total: 1 } }
+      let(:train_car_type1_params) { { name: "Test Car 1", total: 3, colour: "Red" } }
+      let(:train_car_type2_params) { { name: "Test Car 2", total: 1, colour: "Blue" } }
       let(:assigned_cards) { 0 }
       let(:train_car_type1) { TrainCarType.new(train_car_type1_params) }
       let(:train_car_type2) { TrainCarType.new(train_car_type2_params) }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170202015400) do
+ActiveRecord::Schema.define(version: 20170202202859) do
 
   create_table "cities", force: :cascade do |t|
     t.string   "name",       null: false
@@ -53,9 +53,10 @@ ActiveRecord::Schema.define(version: 20170202015400) do
   end
 
   create_table "route_types", force: :cascade do |t|
-    t.string   "colour",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "colour",                 null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.boolean  "accepts_all_train_cars"
   end
 
   create_table "routes", force: :cascade do |t|
@@ -75,6 +76,8 @@ ActiveRecord::Schema.define(version: 20170202015400) do
     t.integer  "total",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "wildcard"
+    t.string   "colour",     null: false
   end
 
 end
