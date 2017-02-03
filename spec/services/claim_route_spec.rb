@@ -28,13 +28,18 @@ describe ClaimRoute do
   let(:player_pieces) { 45 }
   let(:route_pieces) { total_train_cars }
 
-  let(:train_car_type) { TrainCarType.find_by(name: "Box") }
+  let(:train_car_colour) { "Green" }
+  let(:train_car_type) { TrainCarType.find_by(colour: train_car_colour) }
   let(:train_cars) do
     if player.present?
       player.dealt_train_cars.first(total_train_cars)
     end
   end
-  let(:route) { Route.new(city1: test_cities[0], city2: test_cities[1], pieces: route_pieces, route_type: test_route_type) }
+
+  let(:route_type_colour) { train_car_colour }
+  let(:route_type_params) { { colour: route_type_colour } }
+  let(:route_type) { RouteType.create!(route_type_params) }
+  let(:route) { Route.new(city1: test_cities[0], city2: test_cities[1], pieces: route_pieces, route_type: route_type) }
 
   let(:parameters) { { player: player, train_cars: train_cars, route: route } }
   let(:claim_route) { ClaimRoute.new(parameters) }
@@ -195,7 +200,42 @@ describe ClaimRoute do
     end
   end
 
-  context "with a user with the correct number of pieces, train cars and on an unclaimed route" do
+  context "when all the train cars are a different colour" do
+    let(:route_type_colour) { "Red" }
+
+    include_examples "returns false with error", ClaimRoute::WRONG_TRAIN_CAR_TYPE
+  end
+
+  context "with one train car different from the others" do
+    let(:dealt_train_cars) do
+      different_train_car = DealtTrainCar.new(train_car_type: different_train_car_type)
+      normal_train_cars = (total_assigned_train_cars - 1).times.map do
+        DealtTrainCar.new(train_car_type: train_car_type)
+      end
+
+      normal_train_cars.unshift(different_train_car)
+    end
+
+    context "with a different colour" do
+      let(:different_train_car_type) { TrainCarType.find_by(colour: "Red") }
+
+      include_examples "returns false with error", ClaimRoute::WRONG_TRAIN_CAR_TYPE
+    end
+
+    context "with a wildcard" do
+      let(:different_train_car_type) { TrainCarType.find_by(name: "Locomotive") }
+
+      include_examples "returns true and actions the RouteClaim"
+    end
+  end
+
+  context "with a route that accecpts all train cars" do
+    let(:route_type_params) { { colour: route_type_colour, accepts_all_train_cars: true  } }
+
+    include_examples "returns true and actions the RouteClaim"
+  end
+
+  context "with valid parameters" do
     include_examples "returns true and actions the RouteClaim"
   end
 

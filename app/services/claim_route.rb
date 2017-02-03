@@ -5,6 +5,7 @@ class ClaimRoute
   INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED = "The incorrect number of train cars were provided."
   INCORRECT_NUMBER_OF_TRAIN_PIECES = "Player does not have enough train pieces."
   ROUTE_ALREADY_TAKEN = "The route has already been taken."
+  WRONG_TRAIN_CAR_TYPE = "Not all the train cars are the correct type."
   PIECES_TO_SCORE = {
                       1 => 1,
                       2 => 2,
@@ -56,7 +57,23 @@ class ClaimRoute
       INCORRECT_NUMBER_OF_TRAIN_PIECES
     elsif !@train_cars.all? { |train_car| @player.dealt_train_cars.include?(train_car) }
       TRAIN_CARS_DONT_BELONG_TO_PLAYER
+    elsif !train_cars_correct_type?
+      WRONG_TRAIN_CAR_TYPE
     end
     @errors.push(error)
+  end
+
+  def train_cars_correct_type?
+    train_car_types = @train_cars.map { |train_car| train_car.train_car_type }
+    non_wildcard_types = train_car_types.uniq.find_all { |train_car_type| !train_car_type.wildcard }
+    if non_wildcard_types.none?
+      return true
+    elsif non_wildcard_types.one?
+      route_type = @route.route_type
+      train_car_type = non_wildcard_types.first
+      route_type.colour == train_car_type.colour || route_type.accepts_all_train_cars
+    else
+      false
+    end
   end
 end
