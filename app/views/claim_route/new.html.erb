@@ -13,7 +13,7 @@
     <div class="train-car">
       <label>
         <%= check_box_tag "dealt_train_car_ids[]", dealt_train_car.id %>
-        <%= dealt_train_car.train_car_type.name %>
+        <%= render dealt_train_car %>
       </label>
     </div>
     <br>

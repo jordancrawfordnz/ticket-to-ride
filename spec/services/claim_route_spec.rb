@@ -206,6 +206,13 @@ describe ClaimRoute do
     include_examples "returns false with error", ClaimRoute::WRONG_TRAIN_CAR_TYPE
   end
 
+  context "with all Locomotive cards" do
+    let(:train_car_colour) { "Multi" }
+    let(:route_type_colour) { "Red" }
+
+    include_examples "returns true and actions the RouteClaim"
+  end
+
   context "with one train car different from the others" do
     let(:dealt_train_cars) do
       different_train_car = DealtTrainCar.new(train_car_type: different_train_car_type)

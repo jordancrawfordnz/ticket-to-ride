@@ -21,7 +21,7 @@
 
 <h3>My Train Car Cards</h3>
 <% @player.dealt_train_cars.each do |dealt_train_car| %>
-  <div class="train-car">- <%= dealt_train_car.train_car_type.name %></div>
+  <div class="train-car">- <%= render dealt_train_car %></div>
   <br>
 <% end %>
 
