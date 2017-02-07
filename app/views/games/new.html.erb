@@ -4,7 +4,9 @@
 <h2>New Game</h2>
 
 <%= form_for @game do |f| %>
-  <% if flash[:errors]  game_errors = flash[:errors]["game"] end %>
+  <% if flash[:errors] %>
+    <% game_errors = flash[:errors]["game"] %>
+  <% end %>
   <% if game_errors %>
     <br>
     Game errors:<br>
@@ -18,7 +20,9 @@
       <%=players_fields.fields_for "player_#{index}" do |player_fields| %>
         <div>
           <strong><%= "Player #{index + 1}" %></strong>
-          <% if flash[:errors]  field_errors = flash[:errors]["player_#{index}"] end %>
+          <% if flash[:errors] %>
+            <% field_errors = flash[:errors]["player_#{index}"] %>
+          <% end %>
           <% if field_errors %>
             <br>
             Field errors:<br>

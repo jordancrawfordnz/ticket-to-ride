@@ -4,6 +4,7 @@ class SetupGame
   INITIAL_DEAL_AMOUNT = 4
   INITIAL_TRAIN_PIECES = 45
   INITIAL_SCORE = 0
+  GAME_ERROR_KEY = "game"
   NOT_ENOUGH_CARDS_TO_DEAL = "Could not deal to the player, there are not enough cards."
 
   def initialize(player_details:)
@@ -13,30 +14,45 @@ class SetupGame
 
   def call
     Game.transaction do
-      game_instance = Game.create!
-
-      @player_details.each do |player_key, player_params|
-        full_player_params = player_params.merge(game: game_instance,
-                                                 train_pieces: INITIAL_TRAIN_PIECES,
+      players_with_error_keys = @player_details.each.with_object({}) do |(player_key, player_params), players_with_keys|
+        full_player_params = player_params.merge(train_pieces: INITIAL_TRAIN_PIECES,
                                                  score: INITIAL_SCORE)
+        players_with_keys[player_key] = Player.new(full_player_params)
+      end
 
-        player = Player.create(full_player_params)
+      # TODO: Make this better determine the first player.
+      game_instance = Game.new(current_player: players_with_error_keys.values.first, players: players_with_error_keys.values)
 
-        if player.errors.none?
-          deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
+      players_with_error_keys.each do |player_key, player|
+        player.valid?
 
-          if !deal_train_car_result
-            @errors[player_key] ||= []
-            @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
+        @errors[player_key] = player.errors.full_messages if player.errors.any?
+      end
+
+      if game_instance.save
+        players_with_error_keys.each do |player_key, player|
+          if player.save
+            deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
+
+            if !deal_train_car_result
+              @errors[player_key] ||= []
+              @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
+            end
+          else
+            @errors[player_key] = player.errors.full_messages
           end
-        else
-          @errors[player_key] = player.errors.full_messages
         end
       end
 
-      raise ActiveRecord::Rollback if @errors.any?
+      @errors[GAME_ERROR_KEY] = game_instance.errors.full_messages if game_instance.errors.any?
 
-      @game = game_instance
+      if @errors.none?
+        @game = game_instance
+      else
+        raise ActiveRecord::Rollback
+      end
     end
+
+    @game
   end
 end
