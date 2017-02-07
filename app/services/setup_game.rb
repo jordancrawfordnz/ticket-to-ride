@@ -21,11 +21,11 @@ class SetupGame
       end
 
       # TODO: Make this better determine the first player.
-      game_instance = Game.new(current_player: players_with_error_keys.values.first, players: players_with_error_keys.values)
+      game_instance = Game.new(current_player: players_with_error_keys.values.first,
+                               players: players_with_error_keys.values)
 
       players_with_error_keys.each do |player_key, player|
         player.valid?
-
         @errors[player_key] = player.errors.full_messages if player.errors.any?
       end
 
@@ -39,12 +39,13 @@ class SetupGame
               @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
             end
           else
+              # TODO: This shouldn't be done twice.
             @errors[player_key] = player.errors.full_messages
           end
         end
+      else
+        @errors[GAME_ERROR_KEY] = game_instance.errors.full_messages if game_instance.errors.any?
       end
-
-      @errors[GAME_ERROR_KEY] = game_instance.errors.full_messages if game_instance.errors.any?
 
       if @errors.none?
         @game = game_instance
