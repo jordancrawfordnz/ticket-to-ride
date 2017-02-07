@@ -14,37 +14,30 @@ class SetupGame
 
   def call
     Game.transaction do
-      players_with_error_keys = @player_details.each.with_object({}) do |(player_key, player_params), players_with_keys|
-        full_player_params = player_params.merge(train_pieces: INITIAL_TRAIN_PIECES,
-                                                 score: INITIAL_SCORE)
-        players_with_keys[player_key] = Player.new(full_player_params)
-      end
-
-      # TODO: Make this better determine the first player.
-      game_instance = Game.new(current_player: players_with_error_keys.values.first,
-                               players: players_with_error_keys.values)
-
-      players_with_error_keys.each do |player_key, player|
-        player.valid?
-        @errors[player_key] = player.errors.full_messages if player.errors.any?
-      end
-
-      if game_instance.save
-        players_with_error_keys.each do |player_key, player|
-          if player.save
-            deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
-
-            if !deal_train_car_result
-              @errors[player_key] ||= []
-              @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
-            end
-          else
-              # TODO: This shouldn't be done twice.
+      players_with_error_keys = {}
+      game_instance = Game.create do |game|
+        @player_details.each do |player_key, player_params|
+          full_player_params = player_params.merge(train_pieces: INITIAL_TRAIN_PIECES,
+                                                   score: INITIAL_SCORE,
+                                                   game: game)
+          player = Player.new(full_player_params)
+          if player.invalid?
             @errors[player_key] = player.errors.full_messages
           end
+          players_with_error_keys[player_key] = player
         end
-      else
-        @errors[GAME_ERROR_KEY] = game_instance.errors.full_messages if game_instance.errors.any?
+
+        # TODO: Make this better determine the first player.
+        game.current_player = players_with_error_keys.values.first
+      end
+
+      players_with_error_keys.each do |player_key, player|
+        deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
+
+        if !deal_train_car_result
+          @errors[player_key] ||= []
+          @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
+        end
       end
 
       if @errors.none?
