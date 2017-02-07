@@ -1,13 +1,15 @@
 require "rails_helper"
-require 'spec_helper'
+require "spec_helper"
+require "test_data_helper"
 
 describe Player do
   let(:train_car_type) { TrainCarType.find_by(name: "Locomotive") }
   let(:name) { "Player 1" }
   let(:name_alt) { "Player 2" }
   let(:colour) { "Green" }
-  let(:game) { Game.new }
-  let(:game_alt) { Game.new }
+  let(:players) { test_players }
+  let(:game) { Game.new(current_player: players.first) }
+  let(:game_alt) { Game.new(current_player: players.second) }
   let(:player) { Player.new(parameters) }
   let(:train_pieces) { 45 }
   let(:score) { 0 }
@@ -70,7 +72,7 @@ describe Player do
 
     context "when there is an existing Green player" do
       before do
-        Player.create(parameters)
+        Player.create!(parameters)
       end
 
       it "creating another Green player for the same game is invalid" do
@@ -92,7 +94,7 @@ describe Player do
 
     context "when a player is dealt a train car" do
       before do
-        @dealt_car = DealtTrainCar.create(player: player, train_car_type: train_car_type)
+        @dealt_car = DealtTrainCar.create!(player: player, train_car_type: train_car_type)
       end
 
       it "should contain the dealt car" do

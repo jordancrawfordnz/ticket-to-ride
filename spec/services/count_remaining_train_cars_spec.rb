@@ -6,9 +6,13 @@ describe CountRemainingTrainCars do
   let(:train_car_type) { TrainCarType.find_by(name: "Locomotive") }
   let(:train_car_alt_type) { TrainCarType.find_by(name: "Box") }
   let(:players) { test_players }
-  let(:game) { Game.create(players: players) }
+  let(:game) { Game.new(players: players, current_player: players.first) }
   let(:parameters) { { train_car_type: train_car_type, game: game } }
   let(:count_remaining_train_cars) { CountRemainingTrainCars.new(parameters) }
+
+  before do
+    game.save!
+  end
 
   context "with no assigned cards" do
     describe "#call" do

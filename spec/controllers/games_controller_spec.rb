@@ -22,9 +22,11 @@ describe GamesController do
     let(:service_result) { true }
     let(:service_expected_errors) { nil }
     let(:service_double) { instance_double(MakeDrawTrainCarsTurn, call: service_result) }
-    let(:service_game) { Game.create(players: test_players) }
+    let(:players) { test_players }
+    let(:service_game) { Game.new(players: players, current_player: players.first) }
 
     before do
+      service_game.save!
       expect(MakeDrawTrainCarsTurn).to receive(:new) { service_double }.with(player: service_game.players.first)
     end
 

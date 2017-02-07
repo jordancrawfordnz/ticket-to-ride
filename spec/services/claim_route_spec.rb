@@ -3,12 +3,11 @@ require "spec_helper"
 require "test_data_helper"
 
 describe ClaimRoute do
-  let(:game) { Game.new }
+  let(:game) { Game.new(current_player: player, players: [player]) }
   let(:player) do
     Player.new(
-      game: game,
       name: "Player",
-      colour: player_colours[0],
+      colour: player_colours.first,
       train_pieces: player_pieces,
       dealt_train_cars: dealt_train_cars,
       score: 0
@@ -45,6 +44,7 @@ describe ClaimRoute do
   let(:claim_route) { ClaimRoute.new(parameters) }
 
   before do
+    game.save!
     player.save! if player
   end
 
@@ -62,7 +62,7 @@ describe ClaimRoute do
     end
 
     context "with a nil player" do
-      let(:player) { nil }
+      let(:parameters) { { train_cars: train_cars, route: route } }
 
       include_examples "raises error on initialise"
     end

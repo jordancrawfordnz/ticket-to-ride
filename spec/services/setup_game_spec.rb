@@ -69,6 +69,10 @@ describe SetupGame do
             expect(player.train_pieces).to eq SetupGame::INITIAL_TRAIN_PIECES
           end
         end
+
+        it "has the first player as the current_player" do
+          expect(game.current_player).to eq game.players.first
+        end
       end
     end
   end
@@ -79,7 +83,7 @@ describe SetupGame do
     describe "#call" do
       include_examples "does not save anything"
 
-      describe "after being called" do
+      describe "after the game is setup" do
         before do
           setup_game_instance.call
         end
@@ -118,5 +122,4 @@ describe SetupGame do
       end
     end
   end
-
 end
