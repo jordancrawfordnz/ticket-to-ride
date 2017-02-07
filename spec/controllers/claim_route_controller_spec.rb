@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'test_data_helper'
 
 describe ClaimRouteController do
   shared_examples "redirects to the game page with expected errors" do
@@ -18,8 +19,9 @@ describe ClaimRouteController do
 
     let(:route) { saved test_route }
     let(:params) { { game_id: game.id, route_id: route.id, dealt_train_car_ids: train_cars.map(&:id) } }
-    let(:player) { game.players[0] }
-    let(:game) { Game.create(players: test_players) }
+    let(:players) { test_players }
+    let(:player) { game.current_player }
+    let(:game) { Game.new(players: players, current_player: players.first) }
     let(:train_cars) { assign_train_cars(count: 5, player: player) }
 
     let(:service_result) { true }
@@ -30,6 +32,7 @@ describe ClaimRouteController do
     let(:service_double) { instance_double(ClaimRoute, call: service_result, errors: service_expected_errors) }
 
     before do
+      game.save!
       expect(ClaimRoute).to receive(:new) { service_double }.with(player: player, train_cars: train_cars, route: route)
     end
 

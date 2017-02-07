@@ -8,13 +8,29 @@ describe Game do
   let(:parameters) { { players: players } }
   let(:game) { Game.create(parameters) }
 
+  shared_examples "is valid" do
+    it "is valid" do
+      expect(game).to be_valid
+    end
+  end
+
+  shared_examples "is invalid" do
+    it "is invalid" do
+      expect(game).not_to be_valid
+    end
+  end
+
   describe "on initialize" do
     context "if provided no parameters" do
       let(:parameters) { {} }
 
-      it "is valid" do
-        expect(game).to be_valid
-      end
+      include_examples "is invalid"
+    end
+
+    context "if provided a current_player" do
+      let(:parameters) { { current_player: players.first } } 
+
+      include_examples "is valid"
     end
   end
 
@@ -32,22 +48,6 @@ describe Game do
 
       it "should contain the dealt car" do
         expect(game.dealt_train_cars).to eq [@dealt_car]
-      end
-    end
-  end
-
-  describe "#current_player" do
-    context "when no players" do
-      let(:players) { [] }
-
-      it "should be nil" do
-        expect(game.current_player).to be nil
-      end
-    end
-
-    context "when there are players" do
-      it "should be equal to the first player" do
-        expect(game.current_player).to eq players[0]
       end
     end
   end
