@@ -7,6 +7,10 @@ class MakeDrawTrainCarsTurn
 
   def call
     deal_result = DealTrainCars.new(player: @player, amount_to_deal: TURN_DRAW_AMOUNT).call
-    !!deal_result
+    if deal_result
+      FinishTurn.new(game: @game).call
+    else
+      false
+    end
   end
 end

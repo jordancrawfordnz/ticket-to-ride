@@ -81,6 +81,10 @@ describe ClaimRoute do
   end
 
   shared_examples "returns false with error" do |expected_error_message|
+    before do
+      expect(FinishTurn).not_to receive(:new)
+    end
+
     describe "#call" do
       it "returns false" do
         expect(claim_route.call).to be false
@@ -169,9 +173,25 @@ describe ClaimRoute do
   end
 
   shared_examples "returns true and actions the RouteClaim" do
+    let(:finish_turn_result) { true }
+    let(:service_double) { instance_double(FinishTurn, call: finish_turn_result) }
+
+    before do
+      expect(FinishTurn).to receive(:new).once { service_double }
+      expect(service_double).to receive(:call).once
+    end
+
     describe "#call" do
       it "returns true" do
         expect(claim_route.call).to be true
+      end
+
+      context "if FinishTurn returns false" do
+        let(:finish_turn_result) { false }
+
+        it "returns false" do
+          expect(claim_route.call).to be false
+        end
       end
 
       it "makes one route claim" do

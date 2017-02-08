@@ -41,7 +41,11 @@ class ClaimRoute
       @player.save!
     end
 
-    @errors.none?
+    if @errors.none?
+      FinishTurn.new(game: @game).call
+    else
+      false
+    end
   end
 
   private
@@ -60,6 +64,7 @@ class ClaimRoute
     elsif !train_cars_correct_type?
       WRONG_TRAIN_CAR_TYPE
     end
+
     @errors.push(error)
   end
 
