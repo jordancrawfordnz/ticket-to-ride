@@ -1,6 +1,4 @@
 class GamesController < ApplicationController
-  DRAW_TRAIN_CARS_FAILED_ERROR = "Could not draw train cars."
-
   def index
     @games = Game.all
   end
@@ -31,20 +29,6 @@ class GamesController < ApplicationController
   def destroy
     @game.destroy
     redirect_to games_url, notice: 'Game was successfully destroyed.'
-  end
-
-  # TODO: Move this to a controller of its own (but under the same URL)
-  # TODO: Could generalise this a bit more, e.g.: action.
-    # Maybe this belongs somewhere else, something to do with turns perhaps.
-  def draw_train_cars
-    @game = Game.find(params.require(:id))
-    @player = @game.current_player
-
-    draw_train_cars_result = MakeDrawTrainCarsTurn.new(player: @player).call
-    if !draw_train_cars_result
-      flash[:errors] = [DRAW_TRAIN_CARS_FAILED_ERROR]
-    end
-    redirect_to @game
   end
 
   private

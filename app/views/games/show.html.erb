@@ -26,7 +26,7 @@
 <% end %>
 
 <h2>My Turn</h2>
-<%= button_to 'Draw more cards', action: :draw_train_cars, id: @game.id %>
+<%= button_to 'Draw more cards', game_draw_train_cars_path(@game) %>
 
 <br>
 <%= link_to 'Back', games_path, action: :get %>

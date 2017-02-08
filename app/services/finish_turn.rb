@@ -19,8 +19,7 @@ class FinishTurn
         new_current_player = players.first
       end
 
-      @game.current_player = new_current_player
-      @game.save
+      @game.update(current_player: new_current_player)
     else
       false
     end

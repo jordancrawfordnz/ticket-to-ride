@@ -14,45 +14,6 @@ describe GamesController do
     end
   end
 
-  describe "POST draw_train_cars" do
-    def post_draw_train_cars
-      post :draw_train_cars, params: { id: service_game.id }
-    end
-
-    let(:service_result) { true }
-    let(:service_expected_errors) { nil }
-    let(:service_double) { instance_double(MakeDrawTrainCarsTurn, call: service_result) }
-    let(:players) { test_players }
-    let(:service_game) { Game.new(players: players, current_player: players.first) }
-
-    before do
-      service_game.save!
-      expect(MakeDrawTrainCarsTurn).to receive(:new) { service_double }.with(player: service_game.players.first)
-    end
-
-    it "calls MakeDrawTrainCarsTurn#call" do
-      expect(service_double).to receive(:call)
-      post_draw_train_cars
-    end
-
-    context "after making a request" do
-      before do
-        post_draw_train_cars
-      end
-
-      context "on draw success" do
-        include_examples "redirects to the game page with expected errors"
-      end
-
-      context "on draw failure" do
-        let(:service_result) { false }
-        let(:service_expected_errors) { [ GamesController::DRAW_TRAIN_CARS_FAILED_ERROR ] }
-
-        include_examples "redirects to the game page with expected errors"
-      end
-    end
-  end
-
   describe "POST create" do
     def post_create
       post :create, params: params
