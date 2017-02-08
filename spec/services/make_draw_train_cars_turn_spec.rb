@@ -39,7 +39,7 @@ describe MakeDrawTrainCarsTurn do
   context "when there are not enough train cars in the deck" do
     before do
       expect(DealTrainCars).to receive(:new) { instance_double(DealTrainCars, call: false) }
-      expect(FinishTurn).not_to receive(:new)
+      expect(FinishTurn).not_to receive(:new).with(game: game)
     end
 
     it "returns false" do

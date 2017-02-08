@@ -177,7 +177,7 @@ describe ClaimRoute do
     let(:service_double) { instance_double(FinishTurn, call: finish_turn_result) }
 
     before do
-      expect(FinishTurn).to receive(:new).once { service_double }
+      expect(FinishTurn).to receive(:new).once { service_double }.with(game: game)
       expect(service_double).to receive(:call).once
     end
 

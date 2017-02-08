@@ -42,7 +42,7 @@ class ClaimRoute
     end
 
     if @errors.none?
-      FinishTurn.new(game: @game).call
+      FinishTurn.new(game: @player.game).call
     else
       false
     end
