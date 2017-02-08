@@ -21,7 +21,6 @@ class Destination
   end
 
   def claimed?
-    @route.route_claim.present?
     claimed_player.present?
   end
 

@@ -65,7 +65,7 @@ class ClaimRoute
       WRONG_TRAIN_CAR_TYPE
     end
 
-    @errors.push(error)
+    @errors.push(error) if error
   end
 
   def train_cars_correct_type?

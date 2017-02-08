@@ -116,6 +116,58 @@ describe ClaimRoute do
     end
   end
 
+  shared_examples "returns true and actions the RouteClaim" do
+    let(:finish_turn_result) { true }
+    let(:service_double) { instance_double(FinishTurn, call: finish_turn_result) }
+
+    before do
+      expect(FinishTurn).to receive(:new).once { service_double }.with(game: game)
+      expect(service_double).to receive(:call).once
+    end
+
+    describe "#call" do
+      it "returns true" do
+        expect(claim_route.call).to be true
+      end
+
+      context "if FinishTurn returns false" do
+        let(:finish_turn_result) { false }
+
+        it "returns false" do
+          expect(claim_route.call).to be false
+        end
+      end
+
+      it "makes one route claim" do
+        expect { claim_route.call }.to change { RouteClaim.count }.by(1)
+      end
+
+      it "reduces the player pieces by the route_pieces" do
+        expect { claim_route.call }.to change { player.train_pieces }.by(-route_pieces)
+      end
+
+      it "reduces the number of DealtTrainCars by the route_pieces" do
+        expect { claim_route.call }.to change { DealtTrainCar.count }.by(-route_pieces)
+      end
+
+      it "increases the players score" do
+        expect { claim_route.call }.to change { player.score }.by(ClaimRoute::PIECES_TO_SCORE[route.pieces])
+      end
+    end
+
+    context "after claiming a route" do
+      before { claim_route.call }
+
+      it "removes the nominated train cars to use from the players dealt train cars" do
+        expect(player.dealt_train_cars.to_a).to eq (dealt_train_cars - train_cars)
+      end
+
+      it "has no errors" do
+        expect(claim_route.errors).to eq []
+      end
+    end
+  end
+
   context "with a train cars array of length 0" do
     let(:train_cars) { [] }
 
@@ -172,54 +224,6 @@ describe ClaimRoute do
     end
   end
 
-  shared_examples "returns true and actions the RouteClaim" do
-    let(:finish_turn_result) { true }
-    let(:service_double) { instance_double(FinishTurn, call: finish_turn_result) }
-
-    before do
-      expect(FinishTurn).to receive(:new).once { service_double }.with(game: game)
-      expect(service_double).to receive(:call).once
-    end
-
-    describe "#call" do
-      it "returns true" do
-        expect(claim_route.call).to be true
-      end
-
-      context "if FinishTurn returns false" do
-        let(:finish_turn_result) { false }
-
-        it "returns false" do
-          expect(claim_route.call).to be false
-        end
-      end
-
-      it "makes one route claim" do
-        expect { claim_route.call }.to change { RouteClaim.count }.by(1)
-      end
-
-      it "reduces the player pieces by the route_pieces" do
-        expect { claim_route.call }.to change { player.train_pieces }.by(-route_pieces)
-      end
-
-      it "reduces the number of DealtTrainCars by the route_pieces" do
-        expect { claim_route.call }.to change { DealtTrainCar.count }.by(-route_pieces)
-      end
-
-      it "increases the players score" do
-        expect { claim_route.call }.to change { player.score }.by(ClaimRoute::PIECES_TO_SCORE[route.pieces])
-      end
-    end
-
-    context "after claiming a route" do
-      before { claim_route.call }
-
-      it "removes the nominated train cars to use from the players dealt train cars" do
-        expect(player.dealt_train_cars.to_a).to eq (dealt_train_cars - train_cars)
-      end
-    end
-  end
-
   context "when all the train cars are a different colour" do
     let(:route_type_colour) { "Red" }
 
@@ -268,6 +272,31 @@ describe ClaimRoute do
 
   context "with a user who has exactly the correct amount of train pieces" do
     let(:player_pieces) { total_train_cars }
+
+    include_examples "returns true and actions the RouteClaim"
+  end
+
+  context "when a route is already claimed in another game" do
+    let(:route) { Route.all.first }
+    let(:train_car_type) { TrainCarType.find_by(colour: "Multi") }
+
+    let(:alternate_players) { test_players }
+    let(:alternate_game_current_player) { alternate_players.first }
+    let(:alternate_game) { Game.new(current_player: alternate_game_current_player, players: alternate_players) }
+
+    let(:total_assigned_train_cars) { route.pieces }
+
+    before do
+      alternate_game.save!
+      game.save!
+
+      route.pieces.times do
+        DealtTrainCar.create!(train_car_type: train_car_type, player: alternate_game_current_player)
+      end
+
+      alternate_claim_route = ClaimRoute.new(player: alternate_game_current_player, train_cars: alternate_game_current_player.dealt_train_cars, route: route)
+      expect(alternate_claim_route.call).to be true
+    end
 
     include_examples "returns true and actions the RouteClaim"
   end
