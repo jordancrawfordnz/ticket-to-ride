@@ -2,7 +2,8 @@ require 'rails_helper'
 require 'test_data_helper'
 
 describe FetchAllCityDestinations do
-  let(:fetch_all_city_destinations) { FetchAllCityDestinations.new }
+  let(:game) { test_game }
+  let(:fetch_all_city_destinations) { FetchAllCityDestinations.new(game: game) }
 
   describe "#call" do
     before { @call_result = fetch_all_city_destinations.call }

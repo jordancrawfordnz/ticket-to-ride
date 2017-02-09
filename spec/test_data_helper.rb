@@ -37,3 +37,9 @@ def saved(to_save)
   to_save.save!
   to_save
 end
+
+def each_saved(array_to_save)
+  array_to_save.map do |to_save|
+    saved(to_save)
+  end
+end

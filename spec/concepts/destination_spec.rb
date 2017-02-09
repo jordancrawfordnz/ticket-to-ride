@@ -5,9 +5,17 @@ describe Destination do
   let(:city1) { City.new(name: "City 1") }
   let(:city2) { City.new(name: "City 2") }
   let(:route_type) { test_route_type }
-  let(:route) { Route.new(city1: city1, city2: city2, route_type: test_route_type) }
+  let(:pieces) { 3 }
+  let(:route) { Route.new(city1: city1, city2: city2, route_type: test_route_type, pieces: pieces) }
   let(:current_city) { city1 }
-  let(:destination) { Destination.new(route: route, city: city1) }
+  let(:game) { test_game }
+  let(:destination) { Destination.new(route: route, city: city1, game: game) }
+
+  before do
+    city1.save!
+    city2.save!
+    route.save!
+  end
 
   describe "#name" do
     it "is the city2 name" do
@@ -48,7 +56,7 @@ describe Destination do
   end
 
   context "when a route is claimed" do
-    let(:claim_player) { test_game.players.first }
+    let(:claim_player) { game.players.first }
 
     before do
       RouteClaim.create!(player: claim_player, route: route)

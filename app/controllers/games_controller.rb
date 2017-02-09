@@ -7,7 +7,7 @@ class GamesController < ApplicationController
     @game = Game.find(params.require(:id))
     @player = @game.current_player
 
-    @all_city_destinations = FetchAllCityDestinations.new.call
+    @all_city_destinations = FetchAllCityDestinations.new(game: @game).call
   end
 
   def new

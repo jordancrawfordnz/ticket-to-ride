@@ -1,4 +1,5 @@
-require 'rails_helper'
+require "rails_helper"
+require "test_data_helper"
 
 describe Route do
   let(:route) { Route.new(parameters) }
@@ -7,6 +8,7 @@ describe Route do
   let(:city1) { City.new({ name: "City 1" })}
   let(:city2) { City.new({ name: "City 2" })}
   let(:route_type) { RouteType.new({ colour: "Green" }) }
+  let(:game) { test_game }
 
   let(:city1_saved) do
     city1.save
@@ -100,15 +102,15 @@ describe Route do
   end
 
   context "with a route claimed" do
-    let(:player) { Player.new(name: "Player 1")}
+    let(:player) { game.players.first }
     let(:route_claim) { RouteClaim.new(player: player, route: route) }
 
     before do
-      route_claim
+      route_claim.save!
     end
 
     it "claimed_route is not nil" do
-        expect(route.route_claim).not_to be nil
+      expect(route.claimed_route_for_game(game)).not_to be nil
     end
   end
 

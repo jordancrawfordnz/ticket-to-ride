@@ -1,7 +1,8 @@
 class Destination
-  def initialize(route:, city:)
+  def initialize(route:, city:, game:)
     @route = route
     @city = city
+    @game = game
   end
 
   def name
@@ -25,6 +26,7 @@ class Destination
   end
 
   def claimed_player
-    @route.route_claim.player if @route.route_claim
+    claimed_route =  @route.claimed_route_for_game(@game)
+    claimed_route.player if claimed_route
   end
 end

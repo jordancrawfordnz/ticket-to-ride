@@ -53,7 +53,7 @@ class ClaimRoute
   def check_params
     error = if @train_cars.length < 1
       NO_TRAIN_CARS
-    elsif @route.route_claim.present?
+    elsif @route.claimed_route_for_game(@player.game).present?
       ROUTE_ALREADY_TAKEN
     elsif @train_cars.length != @route.pieces
       INCORRECT_NUMBER_OF_TRAIN_CARS_PROVIDED

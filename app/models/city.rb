@@ -4,7 +4,7 @@ class City < ApplicationRecord
   has_many :where_city_2, foreign_key: :city2_id, class_name: 'Route'
 
   def routes
-    fields_to_include = [:route_type, :city1, :city2, :route_claim]
+    fields_to_include = [:route_type, :city1, :city2]
     where_city_1.includes(fields_to_include) + where_city_2.includes(fields_to_include)
   end
 

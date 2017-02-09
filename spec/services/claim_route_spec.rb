@@ -3,7 +3,8 @@ require "spec_helper"
 require "test_data_helper"
 
 describe ClaimRoute do
-  let(:game) { Game.new(current_player: player, players: [player]) }
+  let(:game) { Game.new(current_player: player, players: [player, player_alt]) }
+
   let(:player) do
     Player.new(
       name: "Player",
@@ -13,14 +14,13 @@ describe ClaimRoute do
       score: 0
     )
   end
+  let(:player_alt) { test_players.second }
 
   let(:dealt_train_cars) do
     total_assigned_train_cars.times.map do
       DealtTrainCar.new(train_car_type: train_car_type)
     end
   end
-
-  let(:player_alt) { test_players[1] }
 
   let(:total_assigned_train_cars) { 10 }
   let(:total_train_cars) { 5 }
@@ -38,14 +38,20 @@ describe ClaimRoute do
   let(:route_type_colour) { train_car_colour }
   let(:route_type_params) { { colour: route_type_colour } }
   let(:route_type) { RouteType.create!(route_type_params) }
-  let(:route) { Route.new(city1: test_cities[0], city2: test_cities[1], pieces: route_pieces, route_type: route_type) }
+  let(:cities) { test_cities }
+  let(:route) { Route.new(city1: cities.first, city2: cities.second, pieces: route_pieces, route_type: route_type) }
 
   let(:parameters) { { player: player, train_cars: train_cars, route: route } }
   let(:claim_route) { ClaimRoute.new(parameters) }
 
   before do
+    cities.each do |city|
+      city.save!
+    end
     game.save!
     player.save! if player
+    player_alt.save! if player_alt
+    route.save! if route
   end
 
   describe "on initialisation" do
@@ -208,7 +214,7 @@ describe ClaimRoute do
 
   context "when trying to claim a route that is already claimed" do
     before do
-      RouteClaim.new(player: claim_player, route: route)
+      RouteClaim.create!(player: claim_player, route: route)
     end
 
     context "by another player" do

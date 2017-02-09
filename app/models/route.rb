@@ -2,7 +2,7 @@ class Route < ApplicationRecord
   belongs_to :city1, class_name: 'City'
   belongs_to :city2, class_name: 'City'
   belongs_to :route_type
-  has_one :route_claim
+  has_many :route_claims
 
   validates :pieces, presence: true,
     :numericality => { :greater_than => 0,
@@ -10,6 +10,10 @@ class Route < ApplicationRecord
                      }
 
   validate :cities_ordered_correctly
+
+  def claimed_route_for_game(game)
+    route_claims.joins(:player).merge(game.players).first
+  end
 
   def cities_ordered_correctly
     return if (!city1 || !city2)
