@@ -290,13 +290,14 @@ describe ClaimRoute do
     let(:alternate_game_current_player) { alternate_players.first }
     let(:alternate_game) { Game.new(current_player: alternate_game_current_player, players: alternate_players) }
 
-    let(:total_assigned_train_cars) { route.pieces }
+    let(:total_assigned_train_cars) { route_pieces }
+    let(:route_pieces) { route.pieces }
 
     before do
       alternate_game.save!
       game.save!
 
-      route.pieces.times do
+      route_pieces.times do
         DealtTrainCar.create!(train_car_type: train_car_type, player: alternate_game_current_player)
       end
 
