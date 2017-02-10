@@ -88,7 +88,7 @@ describe ClaimRoute do
 
   shared_examples "returns false with error" do |expected_error_message|
     before do
-      expect(FinishTurn).not_to receive(:new)
+      expect(FinishPlayerActions).not_to receive(:new)
     end
 
     describe "#call" do
@@ -123,11 +123,11 @@ describe ClaimRoute do
   end
 
   shared_examples "returns true and actions the RouteClaim" do
-    let(:finish_turn_result) { true }
-    let(:service_double) { instance_double(FinishTurn, call: finish_turn_result) }
+    let(:finish_player_actions_result) { true }
+    let(:service_double) { instance_double(FinishPlayerActions, call: finish_player_actions_result) }
 
     before do
-      expect(FinishTurn).to receive(:new).once { service_double }.with(game: game)
+      expect(FinishPlayerActions).to receive(:new).once { service_double }.with(game: game)
       expect(service_double).to receive(:call).once
     end
 
@@ -136,8 +136,8 @@ describe ClaimRoute do
         expect(claim_route.call).to be true
       end
 
-      context "if FinishTurn returns false" do
-        let(:finish_turn_result) { false }
+      context "if FinishPlayerActions returns false" do
+        let(:finish_player_actions_result) { false }
 
         it "returns false" do
           expect(claim_route.call).to be false

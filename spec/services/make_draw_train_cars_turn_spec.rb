@@ -8,11 +8,11 @@ describe MakeDrawTrainCarsTurn do
   let(:make_draw_train_cars_turn) { MakeDrawTrainCarsTurn.new(player: player) }
 
   context "when there are enough train cars in the deck" do
-    let(:finish_turn_result) { true }
-    let(:service_double) { instance_double(FinishTurn, call: finish_turn_result) }
+    let(:finish_player_actions_result) { true }
+    let(:service_double) { instance_double(FinishPlayerActions, call: finish_player_actions_result) }
 
     before do
-      expect(FinishTurn).to receive(:new).once { service_double }
+      expect(FinishPlayerActions).to receive(:new).once { service_double }
       expect(service_double).to receive(:call).once
     end
 
@@ -26,8 +26,8 @@ describe MakeDrawTrainCarsTurn do
         expect(make_draw_train_cars_turn.call).to be true
       end
 
-      context "if FinishTurn returns false" do
-        let(:finish_turn_result) { false }
+      context "if FinishPlayerActions returns false" do
+        let(:finish_player_actions_result) { false }
 
         it "returns false" do
           expect(make_draw_train_cars_turn.call).to be false
@@ -39,7 +39,7 @@ describe MakeDrawTrainCarsTurn do
   context "when there are not enough train cars in the deck" do
     before do
       expect(DealTrainCars).to receive(:new) { instance_double(DealTrainCars, call: false) }
-      expect(FinishTurn).not_to receive(:new).with(game: game)
+      expect(FinishPlayerActions).not_to receive(:new).with(game: game)
     end
 
     it "returns false" do

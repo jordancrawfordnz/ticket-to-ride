@@ -11,6 +11,7 @@ class Route < ApplicationRecord
 
   validate :cities_ordered_correctly
 
+  # TODO: This is killing speed. Turn this into an association.
   def claimed_route_for_game(game)
     route_claims.joins(:player).merge(game.players).first
   end
