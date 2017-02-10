@@ -3,7 +3,7 @@ require "spec_helper"
 require "rspec/mocks"
 require "test_data_helper"
 
-describe FinishActionsController do
+describe FinishTurnController do
   shared_examples "redirects to the game page with expected errors" do
     it "redirects to the game page" do
       expect(response).to redirect_to service_game
@@ -21,13 +21,13 @@ describe FinishActionsController do
 
     let(:service_result) { true }
     let(:service_expected_errors) { nil }
-    let(:service_double) { instance_double(FinishPlayerActions, call: service_result) }
+    let(:service_double) { instance_double(FinishTurn, call: service_result) }
     let(:players) { test_players }
     let(:service_game) { Game.new(players: players, current_player: players.first) }
 
     before do
       service_game.save!
-      expect(FinishPlayerActions).to receive(:new) { service_double }.with(game: service_game)
+      expect(FinishTurn).to receive(:new) { service_double }.with(game: service_game)
     end
 
     it "calls FinishPlayerActions#call" do
@@ -46,7 +46,7 @@ describe FinishActionsController do
 
       context "on service failure" do
         let(:service_result) { false }
-        let(:service_expected_errors) { [ FinishActionsController::FINISH_ACTION_FAILED_ERROR ] }
+        let(:service_expected_errors) { [ FinishTurnController::FINISH_TURN_FAILED_ERROR ] }
 
         include_examples "redirects to the game page with expected errors"
       end

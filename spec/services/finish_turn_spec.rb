@@ -4,7 +4,8 @@ require 'test_data_helper'
 describe FinishTurn do
   let(:current_player) { players.first }
   let(:players) { test_players }
-  let(:game) { Game.new(current_player: current_player, players: players) }
+  let(:finished_action) { true }
+  let(:game) { Game.new(current_player: current_player, players: players, finished_action: finished_action) }
   let(:parameters) { { game: game } }
   let(:finish_turn) { FinishTurn.new(parameters) }
 
@@ -52,9 +53,18 @@ describe FinishTurn do
         expect(finish_turn.call).to be true
       end
 
-      it "sets the player to the expected current_player" do
-        finish_turn.call
-        expect(game.current_player).to eq expected_current_player
+      context "after finishing the turn" do
+        before do
+          finish_turn.call
+        end
+
+        it "sets the player to the expected current_player" do
+          expect(game.current_player).to eq expected_current_player
+        end
+
+        it "sets the game's finished_action to false" do
+          expect(game.finished_action).to be false
+        end
       end
     end
 
@@ -76,6 +86,12 @@ describe FinishTurn do
       let(:expected_current_player) { players.first }
 
       include_examples "returns true and the current player is as expected"
+    end
+
+    context "when finished_action is false" do
+      let(:finished_action) { false }
+
+      include_examples "returns false and does not change the player"
     end
   end
 end

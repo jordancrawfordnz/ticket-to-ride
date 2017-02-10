@@ -26,7 +26,8 @@
 <% end %>
 
 <h2>My Turn</h2>
-<%= button_to 'Draw more cards', game_draw_train_cars_path(@game) %>
+<%= button_to 'Finish turn', game_finish_turn_index_path(@game), disabled: !@game.finished_action %>
+<%= button_to 'Draw more cards', game_draw_train_cars_path(@game), disabled: @game.finished_action %>
 
 <br>
 <%= link_to 'Back', games_path, action: :get %>
@@ -46,7 +47,7 @@
           <% else %>
             <%= form_tag new_game_claim_route_path(@game), method: :get do %>
               <%= hidden_field_tag :route_id, destination.route.id %>
-              <%= submit_tag "Claim Route", name: nil %>
+              <%= submit_tag "Claim Route", name: nil, disabled: @game.finished_action %>
             <% end %>
           <% end %>
         </div>
