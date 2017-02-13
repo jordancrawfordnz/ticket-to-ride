@@ -28,6 +28,7 @@ class SetupGame
         end
 
         # TODO: Make this better determine the first player.
+          # CR: Have scope like "oldest_first", "in_creation_order"
         game.current_player = players_with_error_keys.values.first
       end
 
@@ -35,8 +36,7 @@ class SetupGame
         deal_train_car_result = DealTrainCars.new(player: player, amount_to_deal: INITIAL_DEAL_AMOUNT).call
 
         if !deal_train_car_result
-          @errors[player_key] ||= []
-          @errors[player_key].push(NOT_ENOUGH_CARDS_TO_DEAL)
+          (@errors[player_key] ||= []).push(NOT_ENOUGH_CARDS_TO_DEAL)
         end
       end
 

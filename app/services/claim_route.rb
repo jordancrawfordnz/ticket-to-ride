@@ -39,12 +39,12 @@ class ClaimRoute
       @player.dealt_train_cars -= @train_cars
       @player.score += PIECES_TO_SCORE[@route.pieces]
       @player.save!
-    end
 
-    if @errors.none?
-      FinishPlayerActions.new(game: @player.game).call
-    else
-      false
+      if @errors.none?
+        FinishPlayerActions.new(game: @player.game).call
+      else
+        false
+      end
     end
   end
 

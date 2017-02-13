@@ -10,20 +10,22 @@ class FinishTurn
   end
 
   def call
-    players = @game.players
-    if @game.finished_action && players.present?
-      current_player_index = players.index(@game.current_player)
+    @game.with_lock do
+      players = @game.players
+      if @game.finished_action && players.present?
+        current_player_index = players.index(@game.current_player)
 
-      new_current_player = players[current_player_index + 1]
-      if new_current_player.nil?
-        new_current_player = players.first
+        new_current_player = players[current_player_index + 1]
+        if new_current_player.nil?
+          new_current_player = players.first
+        end
+
+        @game.current_player = new_current_player
+        @game.finished_action = false
+        @game.save
+      else
+        false
       end
-
-      @game.current_player = new_current_player
-      @game.finished_action = false
-      @game.save
-    else
-      false
     end
   end
 end

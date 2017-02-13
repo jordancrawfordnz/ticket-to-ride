@@ -10,10 +10,12 @@ class FinishPlayerActions
   end
 
   def call
-    if !@game.finished_action
-      @game.update_attribute(:finished_action, true)
-    else
-      false
+    @game.with_lock do
+      if !@game.finished_action
+        @game.update_attribute(:finished_action, true)
+      else
+        false
+      end
     end
   end
 end
