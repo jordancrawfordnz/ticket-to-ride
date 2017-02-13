@@ -32,6 +32,11 @@
 <br>
 <%= link_to 'Back', games_path, action: :get %>
 
+<h3>Board</h3>
+<div class="board">
+  <%= render 'games/board' %>
+</div>
+
 <h3>City Destinations</h3>
 <div class="routes">
   <% @all_city_destinations.each do |city| %>
