@@ -24,9 +24,11 @@ $(document).ready ->
         opacity = if routeDetails.isFilled then TAKEN_HOVER_OPACITY else NOT_TAKEN_HOVER_OPACITY
         route.attr('fill', fill)
         route.attr('opacity', opacity)
+        route.css('cursor', 'pointer')
       ->
         opacity = if routeDetails.isFilled then TAKEN_OPACITY else NOT_TAKEN_OPACITY
         route.attr('opacity', opacity)
+        route.css('cursor', 'default')
     )
 
     route.click ->
