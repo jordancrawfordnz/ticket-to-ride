@@ -7,7 +7,8 @@ TAKEN_HOVER_OPACITY = 0.8
 NOT_TAKEN_OPACITY = 0
 NOT_TAKEN_HOVER_OPACITY = 0.5
 
-$(document).ready ->
+document.addEventListener "turbolinks:load", ->
+  console.log('ready')
   setupRoute = (routeDetails) ->
     route = $(routeDetails.svgId)
     route.attr('filter', 'url(#glow)')
