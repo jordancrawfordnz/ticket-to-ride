@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170210010642) do
+ActiveRecord::Schema.define(version: 20170213211917) do
 
   create_table "cities", force: :cascade do |t|
     t.string   "name",       null: false
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20170210010642) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "route_type_id"
+    t.integer  "svg_id"
     t.index ["city1_id"], name: "index_routes_on_city1_id"
     t.index ["city2_id"], name: "index_routes_on_city2_id"
     t.index ["route_type_id"], name: "index_routes_on_route_type_id"

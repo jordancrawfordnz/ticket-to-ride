@@ -178,11 +178,11 @@ route_details = [
   [:san_francisco, :los_angeles, route_type_instances[:yellow], 175, 3],
   [:san_francisco, :los_angeles, route_type_instances[:purple], 281, 3],
   [:las_vegas, :los_angeles, route_type_instances[:grey], 283, 2],
-  [:los_angeles, :phoenix, route_type_instances[:grey], 295, 3],
+  [:los_angeles, :phoenix, route_type_instances[:grey], 285, 3],
   [:phoenix, :santa_fe, route_type_instances[:grey], 199, 3],
   [:phoenix, :el_paso, route_type_instances[:grey], 200, 3],
   [:santa_fe, :el_paso, route_type_instances[:grey], 210, 2],
-  [:santa_fe, :oklahoma, route_type_instances[:blue], 209, 3],
+  [:santa_fe, :oklahoma, route_type_instances[:blue], 198, 3],
   [:el_paso, :oklahoma, route_type_instances[:yellow], 295, 5],
   [:oklahoma, :dallas, route_type_instances[:grey], [189, 188], 2, 2],
   [:little_rock, :dallas, route_type_instances[:grey], 187, 2],
@@ -204,8 +204,9 @@ unique_route_instances = route_details.map do |route_details|
   city1 = city_instances[route_details[0]]
   city2 = city_instances[route_details[1]]
   route_type = route_details[2]
-  pieces = route_details[3]
-  repeat = route_details.length > 4 ? route_details[4] : 1
+  svg_ids = Array(route_details[3])
+  pieces = route_details[4]
+  repeat = route_details.length > 5 ? route_details[5] : 1
 
   if (city1.id > city2.id)
     temp_city = city1
@@ -214,8 +215,12 @@ unique_route_instances = route_details.map do |route_details|
   end
 
   indexes = *(0...repeat)
-  indexes.map do
-    Route.create!(city1: city1, city2: city2, pieces: pieces, route_type: route_type)
+  indexes.map do |index|
+    begin
+      Route.create!(city1: city1, city2: city2, pieces: pieces, route_type: route_type, svg_id: svg_ids[index])
+    rescue
+      byebug
+    end
   end
 end
 

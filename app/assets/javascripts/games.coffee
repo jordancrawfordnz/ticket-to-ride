@@ -8,7 +8,6 @@ NOT_TAKEN_OPACITY = 0
 NOT_TAKEN_HOVER_OPACITY = 0.5
 
 document.addEventListener "turbolinks:load", ->
-  console.log('ready')
   setupRoute = (routeDetails) ->
     route = $(routeDetails.svgId)
     route.attr('filter', 'url(#glow)')
@@ -33,7 +32,7 @@ document.addEventListener "turbolinks:load", ->
     )
 
     route.click ->
-      window.location.href = 'claim_route/' + routeDetails.routeId
+      window.location.href += "/claim_route/new?utf8=✓&route_id=" + routeDetails.routeId
 
   setupRoute({
     displayColour: 'green',

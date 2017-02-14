@@ -9,6 +9,8 @@ class Route < ApplicationRecord
                        :less_than_or_equal_to => 6
                      }
 
+  validates :svg_id, presence: true, uniqueness: true
+
   validate :cities_ordered_correctly
 
   # TODO: This is killing speed. Turn this into an association.
