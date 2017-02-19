@@ -1,38 +1,35 @@
 <% content_for :title, "Game" %>
 
-<p id="notice"><%= notice %></p>
+<div class="container-fluid">
+  <p id="notice"><%= notice %></p>
 
-<% if flash[:errors] %>
-  Errors:
-  <% flash[:errors].each do |error| %>
-    <div class="error">- <%= error %></div>
+  <% if flash[:errors] %>
+    Errors:
+    <% flash[:errors].each do |error| %>
+      <div class="error">- <%= error %></div>
+    <% end %>
+    <br>
   <% end %>
+
+  <h1><%= "#{@player.name} - #{@player.colour}" %></h1>
+  <span class="train-piece-count">
+    <strong>Train Pieces:</strong> <%= @player.train_pieces %>
+  </span>
   <br>
-<% end %>
+  <span class="score">
+    <strong>Score:</strong> <%= @player.score %>
+  </span>
 
-<h1><%= "#{@player.name} - #{@player.colour}" %></h1>
-<span class="train-piece-count">
-  <strong>Train Pieces:</strong> <%= @player.train_pieces %>
-</span>
-<br>
-<span class="score">
-  <strong>Score:</strong> <%= @player.score %>
-</span>
+  <h3>My Train Car Cards</h3>
+  <% @player.dealt_train_cars.each do |dealt_train_car| %>
+    <div class="train-car">- <%= render dealt_train_car %></div>
+    <br>
+  <% end %>
 
-<h3>My Train Car Cards</h3>
-<% @player.dealt_train_cars.each do |dealt_train_car| %>
-  <div class="train-car">- <%= render dealt_train_car %></div>
-  <br>
-<% end %>
+  <h2>My Turn</h2>
+  <%= button_to 'Finish turn', game_finish_turn_index_path(@game), disabled: !@game.finished_action %>
+  <%= button_to 'Draw more cards', game_draw_train_cars_path(@game), disabled: @game.finished_action %>
 
-<h2>My Turn</h2>
-<%= button_to 'Finish turn', game_finish_turn_index_path(@game), disabled: !@game.finished_action %>
-<%= button_to 'Draw more cards', game_draw_train_cars_path(@game), disabled: @game.finished_action %>
-
-<br>
-<%= link_to 'Back', games_path, action: :get %>
-
-<h3>Board</h3>
-<div class="board">
+  <h3>Board</h3>
   <%= render 'games/board' %>
 </div>

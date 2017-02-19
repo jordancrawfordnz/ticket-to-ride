@@ -59,3 +59,5 @@ group :test do
 end
 
 gem 'query_diet', group: :development
+
+gem 'bootstrap_form'

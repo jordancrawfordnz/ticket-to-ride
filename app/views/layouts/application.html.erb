@@ -9,6 +9,27 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/" class="logo">
+                <%= image_tag("logo.png") %>
+              </a>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+              <ul class="nav navbar-nav">
+                <li>
+                  <a href="/games/new/">New Game</a>
+                </li>
+                <li>
+                  <a href="/games">Saved Games</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    <div style="margin-top: 40px;">
+      <%= yield %>
+    </div>
   </body>
 </html>

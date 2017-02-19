@@ -1,46 +1,49 @@
 <% content_for :title, "New Game" %>
 
-<h1>Ticket to Ride</h1>
-<h2>New Game</h2>
+<div class="container new-game">
+  <h2>New Game</h2>
 
-<%= form_for @game do |f| %>
-  <% if flash[:errors] %>
-    <% game_errors = flash[:errors]["game"] %>
-  <% end %>
-  <% if game_errors %>
-    <br>
-    Game errors:<br>
-    <% game_errors.each do |game_error| %>
-      - <%= game_error %><br>
+  <%= bootstrap_form_for @game do |f| %>
+    <% if flash[:errors] %>
+      <% game_errors = flash[:errors]["game"] %>
     <% end %>
-  <% end %>
-
-  <% @player_count.times do |index| %>
-    <%=f.fields_for "players" do |players_fields| %>
-      <%=players_fields.fields_for "player_#{index}" do |player_fields| %>
-        <div>
-          <strong><%= "Player #{index + 1}" %></strong>
-          <% if flash[:errors] %>
-            <% field_errors = flash[:errors]["player_#{index}"] %>
-          <% end %>
-          <% if field_errors %>
-            <br>
-            Field errors:<br>
-            <%field_errors.each do |field_error| %>
-              - <%=field_error %><br>
-            <% end %>
-          <% end %>
-          <%= player_fields.label :name, "Name:" %>
-          <%= player_fields.text_field :name %>
-          <%= player_fields.label :colour, "Colour:" %>
-          <%= player_fields.select :colour, ["Yellow", "Black", "Blue", "Green", "Red"]%>
-        </div>
-        <br>
+    <% if game_errors %>
+      <br>
+      Game errors:<br>
+      <% game_errors.each do |game_error| %>
+        - <%= game_error %><br>
       <% end %>
     <% end %>
+
+    <div class="row">
+      <% @player_count.times do |index| %>
+        <%=f.fields_for "players" do |players_fields| %>
+          <%=players_fields.fields_for "player_#{index}" do |player_fields| %>
+            <div class="col-sm-6 col-md-4">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4><%= "Player #{index + 1}" %></h4>
+                  <% if flash[:errors] %>
+                    <% field_errors = flash[:errors]["player_#{index}"] %>
+                  <% end %>
+                  <% if field_errors %>
+                    Field errors:<br>
+                    <%field_errors.each do |field_error| %>
+                      - <%=field_error %><br>
+                    <% end %>
+                  <% end %>
+                  <%= player_fields.text_field :name %>
+                  <%= player_fields.select :colour, ["Yellow", "Black", "Blue", "Green", "Red"] %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="btn-group">
+      <%= f.submit %>
+    </div>
   <% end %>
-
-  <%= f.submit %>
-<% end %>
-
-<%= link_to 'Back', games_path %>
+</div>
