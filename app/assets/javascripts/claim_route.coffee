@@ -8,5 +8,5 @@ document.addEventListener "turbolinks:load", ->
 
     route = $('#svg_' + routeSVGId)
     route.attr('filter', 'url(#glow)')
-    route.attr('fill', 'orange')
+    route.attr('fill', 'white')
     route.attr('opacity', 0.7)
