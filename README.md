@@ -5,7 +5,7 @@ Developed by Jordan Crawford during dev-train at [Powershop](http://powershop.co
 
 **Copyright 2017, Powershop NZ Ltd.** This is because it was developed during work hours at Powershop.
 
-**ALL TICKET TO RIDE GRAPHICS ARE OWNED BY THEIR RESPECTIVE COPYRIGHT OWNERS**
+**ALL TICKET TO RIDE GRAPHICS ARE OWNED BY THEIR RESPECTIVE COPYRIGHT OWNERS, NEITHER POWERSHOP NOR MYSELF CLAIM TO OWN THESE**
 
 ## Licence
 MIT
