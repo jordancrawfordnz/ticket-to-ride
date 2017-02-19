@@ -36,28 +36,3 @@
 <div class="board">
   <%= render 'games/board' %>
 </div>
-
-<h3>City Destinations</h3>
-<div class="routes">
-  <% @all_city_destinations.each do |city| %>
-    <div class="route">
-      <strong><%= city[:city].name %></strong>
-      <% city[:destinations].each do |destination| %>
-        <div class="destination">
-          City: <%= destination.name %><br>
-          Pieces: <%= destination.pieces %><br>
-          Colour: <%= destination.colour %><br>
-          <% if destination.claimed? %>
-            Claimed by <%= destination.claimed_player.name %>
-          <% else %>
-            <%= form_tag new_game_claim_route_path(@game), method: :get do %>
-              <%= hidden_field_tag :route_id, destination.route.id %>
-              <%= submit_tag "Claim Route", name: nil, disabled: @game.finished_action %>
-            <% end %>
-          <% end %>
-        </div>
-        <br>
-      <% end %>
-    </div>
-  <% end %>
-</div>
