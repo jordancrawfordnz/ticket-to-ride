@@ -17,3 +17,16 @@
 .logo img {
   margin: 5px;
 }
+
+.checkable.dealt-train-car img {
+  opacity: 0.5;
+}
+
+.checkable.dealt-train-car img.checked {
+  opacity: 1;
+  background-color: orange;
+}
+
+.clear {
+  clear: both;
+}
