@@ -2,11 +2,26 @@
 
 <h1>Claim a Route</h1>
 
-<h2>Between <%= @route.city1.name %> and <%= @route.city2.name %></h2>
-<strong>Colour:</strong> <%= @route.route_type.colour %><br>
-<strong>Pieces:</strong> <%= @route.pieces %>
+<div class="row">
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">From:</div>
+    <div class="details large"><%= @route.city1.name %></div>
+  </div>
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">To:</div>
+    <div class="details large"><%= @route.city2.name %></div>
+  </div>
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">Pieces:</div>
+    <div class="details large"><%= @route.pieces %></div>
+  </div>
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">Colour:</div>
+    <div class="details large"><%= @route.route_type.colour %></div>
+  </div>
+</div>
 
-<h2>Train Pieces to Use</h2>
+<h3>Pieces to Use</h3>
 <%= form_tag game_claim_route_index_path(@game) do |f| %>
   <div class="pieces">
     <%= hidden_field_tag :route_id, @route.id %>
@@ -21,6 +36,7 @@
   </div>
 
   <div class="clear">
+    <%= link_to "Back", @game, class: "btn btn-default" %>
     <%= submit_tag "Claim Route", class: "btn btn-primary" %>
   </div>
 <% end %>
