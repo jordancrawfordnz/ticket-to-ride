@@ -2,6 +2,10 @@
 
 <h1>Claim a Route</h1>
 
+<%= tag "div", :data => {:routeSVGId => @route.svg_id}, :class => "route-preview board" %>
+<%= render 'games/board' %>
+<br>
+
 <div class="row">
   <div class="col-sm-4 col-md-2">
     <div class="details small">From:</div>
@@ -39,4 +43,5 @@
     <%= link_to "Back", @game, class: "btn btn-default" %>
     <%= submit_tag "Claim Route", class: "btn btn-primary" %>
   </div>
+  <br>
 <% end %>
