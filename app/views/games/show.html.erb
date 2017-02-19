@@ -1,35 +1,49 @@
 <% content_for :title, "Game" %>
 
-<div class="container-fluid">
-  <p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
-  <% if flash[:errors] %>
-    Errors:
-    <% flash[:errors].each do |error| %>
-      <div class="error">- <%= error %></div>
-    <% end %>
-    <br>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |error| %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
   <% end %>
-
-  <h1><%= "#{@player.name} - #{@player.colour}" %></h1>
-  <span class="train-piece-count">
-    <strong>Train Pieces:</strong> <%= @player.train_pieces %>
-  </span>
   <br>
-  <span class="score">
-    <strong>Score:</strong> <%= @player.score %>
-  </span>
+<% end %>
 
-  <h3>My Train Car Cards</h3>
-  <% @player.dealt_train_cars.each do |dealt_train_car| %>
-    <div class="train-car">- <%= render dealt_train_car %></div>
-    <br>
-  <% end %>
+<div class="row">
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">Name:</div>
+    <div class="details large"><%= @player.name %></div>
+  </div>
 
-  <h2>My Turn</h2>
-  <%= button_to 'Finish turn', game_finish_turn_index_path(@game), disabled: !@game.finished_action %>
-  <%= button_to 'Draw more cards', game_draw_train_cars_path(@game), disabled: @game.finished_action %>
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">Colour:</div>
+    <div class="details large"><%= @player.colour %></div>
+  </div>
 
-  <h3>Board</h3>
-  <%= render 'games/board' %>
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">Train Pieces:</div>
+    <div class="details large"><%= @player.train_pieces %></div>
+  </div>
+
+  <div class="col-sm-4 col-md-2">
+    <div class="details small">Score:</div>
+    <div class="details large"><%= @player.score %></div>
+  </div>
+
+  <div class="col-sm-4 col-md-2">
+    <div class="game-action-buttons">
+      <%= button_to 'Finish turn', game_finish_turn_index_path(@game), class: "btn btn-primary" if @game.finished_action %>
+      <%= button_to 'Draw more train cards', game_draw_train_cars_path(@game), class: "btn btn-primary" if !@game.finished_action %>
+    </div>
+  </div>
 </div>
+
+<% @player.dealt_train_cars.each do |dealt_train_car| %>
+  <div class="dealt-train-car">
+    <%= image_tag("cards/" + dealt_train_car.train_car_type.name + ".jpg") %>
+  </div>
+<% end %>
+
+<%= render 'games/board' %>

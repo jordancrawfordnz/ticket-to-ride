@@ -1,3 +1,28 @@
 // Place all the styles related to the games controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.details {
+  text-align: center;
+}
+
+.details.large {
+  font-size: 30px;
+}
+
+.details.small {
+  font-size: 18px;
+}
+
+.game-action-buttons {
+  margin-top: 18px;
+}
+
+.dealt-train-car {
+  float: left;
+  margin: 10px;
+}
+
+.main.container {
+  margin-top: 40px;
+}

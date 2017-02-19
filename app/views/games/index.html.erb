@@ -1,44 +1,44 @@
-<div class="container">
-  <p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
-  <h1>Games</h1>
+<h1>Games</h1>
 
-  <div class="row">
-    <% @games.each do |game| %>
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <p>
-              <strong>Players</strong>
-              <table style="width: 100%">
-                <thead>
+<div class="row">
+  <% @games.each do |game| %>
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p>
+            <strong>Players</strong>
+            <table style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Colour</th>
+                  <th>Score</th>
+                  <th>Train Pieces</th>
+                  <th>Dealt Train Cars</th>
+                  <th>Is current player?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% game.players.each do |player| %>
                   <tr>
-                    <th>Name</th>
-                    <th>Score</th>
-                    <th>Train Pieces</th>
-                    <th>Dealt Train Cars</th>
-                    <th>Is current player?</th>
+                    <td><%= player.name %></td>
+                    <td><%= player.colour %></td>
+                    <td><%= player.score %></td>
+                    <td><%= player.train_pieces %></td>
+                    <td><%= player.dealt_train_cars.count %></td>
+                    <td><%= player == game.current_player ? "Yes" : "" %></td>
                   </tr>
-                </thead>
-                <tbody>
-                  <% game.players.each do |player| %>
-                    <tr>
-                      <td><%= player.name %></td>
-                      <td><%= player.score %></td>
-                      <td><%= player.train_pieces %></td>
-                      <td><%= player.dealt_train_cars.count %></td>
-                      <td><%= player == game.current_player ? "Yes" : "" %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            </p>
+                <% end %>
+              </tbody>
+            </table>
+          </p>
 
-            <%= link_to 'Show', game, class: "btn btn-primary" %>
-            <%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
-          </div>
+          <%= link_to 'Show Game', game, class: "btn btn-primary" %>
+          <%= link_to 'Destroy Game', game, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
         </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
