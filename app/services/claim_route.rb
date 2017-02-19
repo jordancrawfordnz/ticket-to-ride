@@ -6,6 +6,7 @@ class ClaimRoute
   INCORRECT_NUMBER_OF_TRAIN_PIECES = "Player does not have enough train pieces."
   ROUTE_ALREADY_TAKEN = "The route has already been taken."
   WRONG_TRAIN_CAR_TYPE = "Not all the train cars are the correct type."
+  FINISHED_ACTION = "The player has already completed their action."
   PIECES_TO_SCORE = {
                       1 => 1,
                       2 => 2,
@@ -53,6 +54,8 @@ class ClaimRoute
   def check_params
     error = if @train_cars.length < 1
       NO_TRAIN_CARS
+    elsif @player.game.finished_action
+      FINISHED_ACTION
     elsif @route.claimed_route_for_game(@player.game).present?
       ROUTE_ALREADY_TAKEN
     elsif @train_cars.length != @route.pieces

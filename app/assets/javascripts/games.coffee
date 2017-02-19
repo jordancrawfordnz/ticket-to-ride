@@ -9,7 +9,7 @@ NOT_TAKEN_HOVER_OPACITY = 0.5
 
 document.addEventListener "turbolinks:load", ->
   setupRoute = (routeDetails) ->
-    route = $(routeDetails.svgId)
+    route = $('#svg_' + routeDetails.svgId)
     route.attr('filter', 'url(#glow)')
 
     if routeDetails.isFilled
@@ -18,30 +18,22 @@ document.addEventListener "turbolinks:load", ->
     else
       route.attr('opacity', NOT_TAKEN_OPACITY)
 
-    route.hover(
-      ->
-        fill = if routeDetails.isFilled then routeDetails.displayColour else 'white'
-        opacity = if routeDetails.isFilled then TAKEN_HOVER_OPACITY else NOT_TAKEN_HOVER_OPACITY
-        route.attr('fill', fill)
-        route.attr('opacity', opacity)
-        route.css('cursor', 'pointer')
-      ->
-        opacity = if routeDetails.isFilled then TAKEN_OPACITY else NOT_TAKEN_OPACITY
-        route.attr('opacity', opacity)
-        route.css('cursor', 'default')
-    )
+    if routeDetails.canClick
+      route.hover(
+        ->
+          fill = if routeDetails.isFilled then routeDetails.displayColour else 'white'
+          opacity = if routeDetails.isFilled then TAKEN_HOVER_OPACITY else NOT_TAKEN_HOVER_OPACITY
+          route.attr('fill', fill)
+          route.attr('opacity', opacity)
+          route.css('cursor', 'pointer')
+        ->
+          opacity = if routeDetails.isFilled then TAKEN_OPACITY else NOT_TAKEN_OPACITY
+          route.attr('opacity', opacity)
+          route.css('cursor', 'default')
+      )
 
-    route.click ->
-      window.location.href += "/claim_route/new?utf8=✓&route_id=" + routeDetails.routeId
+      route.click ->
+        window.location.href += "/claim_route/new?utf8=✓&route_id=" + routeDetails.routeId
 
-  setupRoute({
-    displayColour: 'green',
-    isFilled: true,
-    svgId: '#svg_118',
-    routeId: 20
-  })
-
-  setupRoute({
-    svgId: '#svg_136',
-    routeId: 30
-  })
+  $.get window.location.href + '/board.json', (board) ->
+    board.forEach setupRoute

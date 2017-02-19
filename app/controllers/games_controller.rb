@@ -31,6 +31,31 @@ class GamesController < ApplicationController
     redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
+  def board
+    @game = Game.find(params.require(:id))
+
+    board = Route.all.map do |route|
+      board_display = {
+        svgId: route.svg_id,
+        routeId: route.id
+      }
+
+      route_claim = route.claimed_route_for_game(@game)
+      board_display['isFilled'] = route_claim.present?
+      board_display['canClick'] = !@game.finished_action && !route_claim.present?
+
+      if route_claim.present?
+        board_display['displayColour'] = route_claim.player.colour
+      end
+
+      board_display
+    end
+
+    respond_to do |format|
+      format.json { render :json => board }
+    end
+  end
+
   private
 
   def clean_player_detail(player_detail)

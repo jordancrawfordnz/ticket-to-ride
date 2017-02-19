@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :draw_train_cars, only: [:create]
     resources :finish_turn, only: [:create]
   end
+  match "/games/:id/board" => "games#board", via: :get
 
   root 'games#new'
 end
